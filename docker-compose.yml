@@ -1,0 +1,56 @@
+services:
+  # Frontend Service
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend-service
+    environment:
+      - PORT=3000
+      - BACKEND_SERVICE_URL=http://backend-service:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - my-network
+    
+  # Backend Service
+  backend:
+    build:
+      context: ./backend
+    container_name: backend-service
+    environment:
+      - PORT=3001
+      - DB_HOST=db
+      - DB_PORT=1521
+      - DB_USER=admin
+      - DB_PASS=admin
+      - DB_DIALECT=oracle
+      - DB_SID_OLTP=oltp
+      - DB_SID_WAREHOUSE=warehouse
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    networks:
+      - my-network
+  
+  # Oracle Enterprise Database for Backend Service
+  db:
+    image: container-registry.oracle.com/database/enterprise:19.3.0.0
+    container_name: db
+    environment:
+      - ORACLE_PWD=admin
+      - ORACLE_SID=XE
+    ports:
+      - "1522:1521"
+    volumes:
+      - db-data:/opt/oracle/oradata
+      - ./scripts:/docker-entrypoint-initdb.d
+    networks:
+      - my-network
+volumes:
+  db-data:
+networks:
+  my-network:
+    driver: bridge
