@@ -15,7 +15,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["./src/routes/oltp/*.js", "./src/routes/warehouse/*.js"],
+  apis: ["./src/routes/oltp/*.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);

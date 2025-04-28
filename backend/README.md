@@ -1,3 +1,3 @@
 # Backend Service
 
-This is a microservice for managing the DB for our Taxi company.
+This is a microservice for managing the backend components of our Taxi company.

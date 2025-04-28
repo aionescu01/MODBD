@@ -27,7 +27,6 @@ services:
       - DB_PASS=admin
       - DB_DIALECT=oracle
       - DB_SID_OLTP=oltp
-      - DB_SID_WAREHOUSE=warehouse
     ports:
       - "3001:3001"
     depends_on:
@@ -49,6 +48,7 @@ services:
       - ./scripts:/docker-entrypoint-initdb.d
     networks:
       - my-network
+
 volumes:
   db-data:
 networks:

@@ -120,157 +120,157 @@ const FacturaManagement = () => {
   return (
     <div>
       <Header/>
-    <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
-      <Paper sx={{ p: 2 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h5" component="h2">
-            Management Facturi
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setSelectedFactura(null);
-              setFormData({
-                cod_dispecer: '',
-                cod_cursa: '',
-                pret: ''
-              });
-              setOpenDialog(true);
-            }}
-          >
-            Adaugă Factură
-          </Button>
-        </Box>
-
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Cod Factură</TableCell>
-                <TableCell>Cod Dispecer</TableCell>
-                <TableCell>Cod Cursă</TableCell>
-                <TableCell>Preț (RON)</TableCell>
-                <TableCell>Acțiuni</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {facturi.map((factura) => (
-                <TableRow key={factura.cod_factura}>
-                  <TableCell>{factura.cod_factura}</TableCell>
-                  <TableCell>{factura.cod_dispecer}</TableCell>
-                  <TableCell>{factura.cod_cursa}</TableCell>
-                  <TableCell>{factura.pret.toFixed(2)}</TableCell>
-                  <TableCell>
-                    <Stack direction="row" spacing={1}>
-                      <IconButton
-                        size="small"
-                        color="primary"
-                        onClick={() => handleEdit(factura)}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        color="error"
-                        onClick={() => {
-                          setSelectedFactura(factura);
-                          setOpenDeleteDialog(true);
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Stack>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        {/* Add/Edit Dialog */}
-        <Dialog 
-          open={openDialog} 
-          onClose={() => setOpenDialog(false)}
-          maxWidth="sm"
-          fullWidth
-        >
-          <DialogTitle>
-            {selectedFactura ? 'Editează Factură' : 'Adaugă Factură Nouă'}
-          </DialogTitle>
-          <DialogContent>
-            <Box
-              component="form"
-              sx={{
-                '& .MuiTextField-root': { m: 1 },
-                mt: 2,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2
+      <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+        <Paper sx={{ p: 2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant="h5" component="h2">
+              Management Facturi
+            </Typography>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setSelectedFactura(null);
+                setFormData({
+                  cod_dispecer: '',
+                  cod_cursa: '',
+                  pret: ''
+                });
+                setOpenDialog(true);
               }}
             >
-              <TextField
-                label="Cod Dispecer"
-                name="cod_dispecer"
-                type="number"
-                value={formData.cod_dispecer}
-                onChange={handleInputChange}
-                fullWidth
-              />
-              <TextField
-                label="Cod Cursă"
-                name="cod_cursa"
-                type="number"
-                value={formData.cod_cursa}
-                onChange={handleInputChange}
-                fullWidth
-              />
-              <TextField
-                label="Preț"
-                name="pret"
-                type="number"
-                inputProps={{ 
-                  step: "0.01",
-                  min: "0"
-                }}
-                value={formData.pret}
-                onChange={handleInputChange}
-                fullWidth
-              />
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenDialog(false)}>Anulează</Button>
-            <Button onClick={handleSubmit} variant="contained">
-              {selectedFactura ? 'Salvează' : 'Adaugă'}
+              Adaugă Factură
             </Button>
-          </DialogActions>
-        </Dialog>
+          </Box>
 
-        {/* Delete Confirmation Dialog */}
-        <Dialog
-          open={openDeleteDialog}
-          onClose={() => setOpenDeleteDialog(false)}
-        >
-          <DialogTitle>Confirmă ștergerea</DialogTitle>
-          <DialogContent>
-            <Typography>
-              Ești sigur că vrei să ștergi această factură? Această acțiune nu poate fi anulată.
-            </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenDeleteDialog(false)}>Anulează</Button>
-            <Button 
-              onClick={() => handleDelete(selectedFactura?.cod_factura)}
-              color="error"
-              variant="contained"
-            >
-              Șterge
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Paper>
-    </Container>
-    <Footer/>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Cod Factură</TableCell>
+                  <TableCell>Cod Dispecer</TableCell>
+                  <TableCell>Cod Cursă</TableCell>
+                  <TableCell>Preț (RON)</TableCell>
+                  <TableCell>Acțiuni</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {facturi.map((factura) => (
+                  <TableRow key={factura.cod_factura}>
+                    <TableCell>{factura.cod_factura}</TableCell>
+                    <TableCell>{factura.cod_dispecer}</TableCell>
+                    <TableCell>{factura.cod_cursa}</TableCell>
+                    <TableCell>{factura.pret.toFixed(2)}</TableCell>
+                    <TableCell>
+                      <Stack direction="row" spacing={1}>
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={() => handleEdit(factura)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          color="error"
+                          onClick={() => {
+                            setSelectedFactura(factura);
+                            setOpenDeleteDialog(true);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          {/* Add/Edit Dialog */}
+          <Dialog 
+            open={openDialog} 
+            onClose={() => setOpenDialog(false)}
+            maxWidth="sm"
+            fullWidth
+          >
+            <DialogTitle>
+              {selectedFactura ? 'Editează Factură' : 'Adaugă Factură Nouă'}
+            </DialogTitle>
+            <DialogContent>
+              <Box
+                component="form"
+                sx={{
+                  '& .MuiTextField-root': { m: 1 },
+                  mt: 2,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2
+                }}
+              >
+                <TextField
+                  label="Cod Dispecer"
+                  name="cod_dispecer"
+                  type="number"
+                  value={formData.cod_dispecer}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+                <TextField
+                  label="Cod Cursă"
+                  name="cod_cursa"
+                  type="number"
+                  value={formData.cod_cursa}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+                <TextField
+                  label="Preț"
+                  name="pret"
+                  type="number"
+                  inputProps={{ 
+                    step: "0.01",
+                    min: "0"
+                  }}
+                  value={formData.pret}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+              </Box>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenDialog(false)}>Anulează</Button>
+              <Button onClick={handleSubmit} variant="contained">
+                {selectedFactura ? 'Salvează' : 'Adaugă'}
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          {/* Delete Confirmation Dialog */}
+          <Dialog
+            open={openDeleteDialog}
+            onClose={() => setOpenDeleteDialog(false)}
+          >
+            <DialogTitle>Confirmă ștergerea</DialogTitle>
+            <DialogContent>
+              <Typography>
+                Ești sigur că vrei să ștergi această factură? Această acțiune nu poate fi anulată.
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenDeleteDialog(false)}>Anulează</Button>
+              <Button 
+                onClick={() => handleDelete(selectedFactura?.cod_factura)}
+                color="error"
+                variant="contained"
+              >
+                Șterge
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Paper>
+      </Container>
+      <Footer/>
     </div>
   );
 };

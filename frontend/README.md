@@ -1,1 +1,3 @@
-#### Folder that contains the frontend components
+# Frontend Service
+
+This is a microservice for managing the frontend components of our Taxi company.

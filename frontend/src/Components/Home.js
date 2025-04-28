@@ -18,16 +18,6 @@ const Home = () => {
     { name: "Lucreaza", path: "/lucreaza"}
   ];
 
-  const tablesWarehouse = [
-    { name: "Dimensiuni Angajat", path:"/wangajat"},
-    { name: "Dimensiuni Client", path:"/wclient"},
-    { name: "Dimensiuni Factura", path:"/wfactura"},
-    { name: "Dimensiuni Locatie", path:"/wloc"},
-    { name: "Dimensiuni Timp", path:"/wtime"},
-    { name: "Dimensiuni Masina", path: "/wcar"},
-    { name: "Dimensiuni Cursa", path: "/wride" }
-  ];
-
   const images = [
     "/taxi.jpg",
     "/taxi2.jpg",
@@ -79,24 +69,7 @@ const Home = () => {
             </div>
           ))}
         </div>
-
-        {/* Carduri Warehouse*/}
-        <div className="card-container">
-          {tablesWarehouse.map((table) => (
-            <div key={table.name} className="card">
-              <h2>{table.name}</h2>
-              <NavLink to={table.path} className="button">Vezi detalii</NavLink>
-            </div>
-          ))}
-        </div>
-
-        {/* Grafice warehouse */}
-        <div className="card-container">
-          <div key='grafice' className="card">
-              <h2>Grafice warehouse</h2>
-              <NavLink to='/grafice' className="button">Vezi grafice warehouse</NavLink>
-          </div>
-        </div>
+        
       </main>
       <Footer />
     </div>
