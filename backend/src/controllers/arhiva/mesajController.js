@@ -1,4 +1,4 @@
-const Mesaj = require("../../models/oltp/Mesaj");
+const Mesaj = require("../../models/arhiva/Mesaj");
 
 exports.createMesaj = async (req, res) => {
   try {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from './Header';
-import Footer from './Footer';
+import Header from '../Header';
+import Footer from '../Footer';
 import {
   Table,
   TableBody,
@@ -15,7 +15,6 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  MenuItem,
   IconButton,
   Typography,
   Box,
@@ -27,21 +26,16 @@ import {
   Delete as DeleteIcon
 } from '@mui/icons-material';
 
-const AngajatNordManagement = () => {
+const AngajatHRManagement = () => {
   const [employees, setEmployees] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [formData, setFormData] = useState({
-    nume: '',
-    prenume: '',
-    nr_telefon: '',
-    tip_angajat: '',
     data_nastere: '',
     data_angajare: '',
     salariu: '',
-    cod_masina: '',
-    dispecerat: ''
+    cod_masina: ''
   });
 
   useEffect(() => {
@@ -50,7 +44,7 @@ const AngajatNordManagement = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/nord/angajatNord');
+      const response = await fetch('http://localhost:3001/api/arhiva/angajatHR');
       const data = await response.json();
       setEmployees(data);
     } catch (error) {
@@ -69,8 +63,8 @@ const AngajatNordManagement = () => {
   const handleSubmit = async () => {
     try {
       const url = selectedEmployee 
-        ? `http://localhost:3001/api/nord/angajatNord/${selectedEmployee.cod_angajat}`
-        : 'http://localhost:3001/api/nord/angajatNord';
+        ? `http://localhost:3001/api/arhiva/angajatHR/${selectedEmployee.cod_angajat}`
+        : 'http://localhost:3001/api/arhiva/angajatHR';
       
       const method = selectedEmployee ? 'PUT' : 'POST';
       
@@ -85,15 +79,10 @@ const AngajatNordManagement = () => {
       setOpenDialog(false);
       setSelectedEmployee(null);
       setFormData({
-        nume: '',
-        prenume: '',
-        nr_telefon: '',
-        tip_angajat: '',
         data_nastere: '',
         data_angajare: '',
         salariu: '',
-        cod_masina: '',
-        dispecerat: ''
+        cod_masina: ''
       });
       fetchEmployees();
     } catch (error) {
@@ -109,7 +98,7 @@ const AngajatNordManagement = () => {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:3001/api/nord/angajatNord/${id}`, {
+      await fetch(`http://localhost:3001/api/arhiva/angajatHR/${id}`, {
         method: 'DELETE',
       });
       setOpenDeleteDialog(false);
@@ -134,15 +123,10 @@ const AngajatNordManagement = () => {
             onClick={() => {
               setSelectedEmployee(null);
               setFormData({
-                nume: '',
-                prenume: '',
-                nr_telefon: '',
-                tip_angajat: '',
                 data_nastere: '',
                 data_angajare: '',
                 salariu: '',
-                cod_masina: '',
-                dispecerat: ''
+                cod_masina: ''
               });
               setOpenDialog(true);
             }}
@@ -155,30 +139,20 @@ const AngajatNordManagement = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Nume</TableCell>
-                <TableCell>Prenume</TableCell>
-                <TableCell>Telefon</TableCell>
-                <TableCell>Tip</TableCell>
                 <TableCell>Data Nașterii</TableCell>
                 <TableCell>Data Angajării</TableCell>
                 <TableCell>Salariu</TableCell>
                 <TableCell>Cod Mașină</TableCell>
-                <TableCell>Dispecerat</TableCell>
                 <TableCell>Acțiuni</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {employees.map((employee) => (
                 <TableRow key={employee.cod_angajat}>
-                  <TableCell>{employee.nume}</TableCell>
-                  <TableCell>{employee.prenume}</TableCell>
-                  <TableCell>{employee.nr_telefon}</TableCell>
-                  <TableCell>{employee.tip_angajat}</TableCell>
                   <TableCell>{new Date(employee.data_nastere).toLocaleDateString()}</TableCell>
                   <TableCell>{new Date(employee.data_angajare).toLocaleDateString()}</TableCell>
                   <TableCell>{employee.salariu}</TableCell>
                   <TableCell>{employee.cod_masina}</TableCell>
-                  <TableCell>{employee.dispecerat}</TableCell>
                   <TableCell>
                     <Stack direction="row" spacing={1}>
                       <IconButton
@@ -228,38 +202,6 @@ const AngajatNordManagement = () => {
               }}
             >
               <TextField
-                label="Nume"
-                name="nume"
-                value={formData.nume}
-                onChange={handleInputChange}
-                fullWidth
-              />
-              <TextField
-                label="Prenume"
-                name="prenume"
-                value={formData.prenume}
-                onChange={handleInputChange}
-                fullWidth
-              />
-              <TextField
-                label="Număr Telefon"
-                name="nr_telefon"
-                value={formData.nr_telefon}
-                onChange={handleInputChange}
-                fullWidth
-              />
-              <TextField
-                select
-                label="Tip Angajat"
-                name="tip_angajat"
-                value={formData.tip_angajat}
-                onChange={handleInputChange}
-                fullWidth
-              >
-                <MenuItem value="Permanent">Permanent</MenuItem>
-                <MenuItem value="Temporar">Temporar</MenuItem>
-              </TextField>
-              <TextField
                 label="Data Nașterii"
                 name="data_nastere"
                 type="date"
@@ -293,17 +235,6 @@ const AngajatNordManagement = () => {
                 onChange={handleInputChange}
                 fullWidth
               />
-              <TextField
-                select
-                label="Dispecerat"
-                name="dispecerat"
-                value={formData.dispecerat}
-                onChange={handleInputChange}
-                fullWidth
-              >
-                <MenuItem value="Da">Da</MenuItem>
-                <MenuItem value="Nu">Nu</MenuItem>
-              </TextField>
             </Box>
           </DialogContent>
           <DialogActions>
@@ -343,4 +274,4 @@ const AngajatNordManagement = () => {
   );
 };
 
-export default AngajatNordManagement;
+export default AngajatHRManagement;

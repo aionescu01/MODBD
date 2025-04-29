@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from './Header';
-import Footer from './Footer';
+import Header from '../Header';
+import Footer from '../Footer';
 import {
   Table,
   TableBody,
@@ -27,7 +27,7 @@ import {
   Delete as DeleteIcon
 } from '@mui/icons-material';
 
-const AngajatSudManagement = () => {
+const AngajatCentralManagement = () => {
   const [employees, setEmployees] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -50,7 +50,7 @@ const AngajatSudManagement = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/sud/angajatSud');
+      const response = await fetch('http://localhost:3001/api/central/angajatCentral');
       const data = await response.json();
       setEmployees(data);
     } catch (error) {
@@ -69,8 +69,8 @@ const AngajatSudManagement = () => {
   const handleSubmit = async () => {
     try {
       const url = selectedEmployee 
-        ? `http://localhost:3001/api/sud/angajatSud/${selectedEmployee.cod_angajat}`
-        : 'http://localhost:3001/api/sud/angajatSud';
+        ? `http://localhost:3001/api/central/angajatCentral/${selectedEmployee.cod_angajat}`
+        : 'http://localhost:3001/api/central/angajatCentral';
       
       const method = selectedEmployee ? 'PUT' : 'POST';
       
@@ -109,7 +109,7 @@ const AngajatSudManagement = () => {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:3001/api/sud/angajatSud/${id}`, {
+      await fetch(`http://localhost:3001/api/central/angajatCentral/${id}`, {
         method: 'DELETE',
       });
       setOpenDeleteDialog(false);
@@ -343,4 +343,4 @@ const AngajatSudManagement = () => {
   );
 };
 
-export default AngajatSudManagement;
+export default AngajatCentralManagement;

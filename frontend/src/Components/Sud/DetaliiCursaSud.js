@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from './Header';
-import Footer from './Footer';
+import Header from '../Header';
+import Footer from '../Footer';
 import {
   Table,
   TableBody,
@@ -26,27 +26,29 @@ import {
   Delete as DeleteIcon
 } from '@mui/icons-material';
 
-const LocatiiNordManagement = () => {
-  const [locatii, setLocatii] = useState([]);
+const DetaliiCursaSudManagement = () => {
+  const [detaliiCurse, setDetaliiCurse] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [selectedLocatie, setSelectedLocatie] = useState(null);
+  const [selectedDetaliu, setSelectedDetaliu] = useState(null);
   const [formData, setFormData] = useState({
-    localitate: '',
-    judet: ''
+    cod_cursa: 1,
+    data_cursa: '',
+    nota_sofer: 1,
+    nota_client: 1
   });
 
   useEffect(() => {
-    fetchLocatii();
+    fetchDetaliiCurse();
   }, []);
 
-  const fetchLocatii = async () => {
+  const fetchDetaliiCurse = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/nord/locatiiNord');
+      const response = await fetch('http://localhost:3001/api/sud/detaliiCursaSud');
       const data = await response.json();
-      setLocatii(data);
+      setDetaliiCurse(data);
     } catch (error) {
-      console.error('Error fetching locatii:', error);
+      console.error('Error fetching detalii curse:', error);
     }
   };
 
@@ -60,11 +62,11 @@ const LocatiiNordManagement = () => {
 
   const handleSubmit = async () => {
     try {
-      const url = selectedLocatie 
-        ? `http://localhost:3001/api/nord/locatiiNord/${selectedLocatie.cod_locatie}`
-        : 'http://localhost:3001/api/nord/locatiiNord';
+      const url = selectedDetaliu 
+        ? `http://localhost:3001/api/sud/detaliiCursaSud/${selectedDetaliu.cod_cursa}`
+        : 'http://localhost:3001/api/sud/detaliiCursaSud';
       
-      const method = selectedLocatie ? 'PUT' : 'POST';
+      const method = selectedDetaliu ? 'PUT' : 'POST';
       
       await fetch(url, {
         method,
@@ -75,36 +77,38 @@ const LocatiiNordManagement = () => {
       });
       
       setOpenDialog(false);
-      setSelectedLocatie(null);
+      setSelectedDetaliu(null);
       setFormData({
-        localitate: '',
-        judet: ''
+        cod_cursa: 1,
+        data_cursa: '',
+        nota_sofer: 1,
+        nota_client: 1
       });
-      fetchLocatii();
+      fetchDetaliiCurse();
     } catch (error) {
-      console.error('Error saving locatie:', error);
+      console.error('Error saving detalii cursa:', error);
     }
   };
 
-  const handleEdit = (locatie) => {
-    setSelectedLocatie(locatie);
+  const handleEdit = (detaliu) => {
+    setSelectedDetaliu(detaliu);
     setFormData({
-      localitate: locatie.localitate,
-      judet: locatie.judet
+      ...detaliu,
+      data_cursa: detaliu.data_cursa.slice(0, 16) // Format datetime-local
     });
     setOpenDialog(true);
   };
 
-  const handleDelete = async (cod_locatie) => {
+  const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:3001/api/nord/locatiiNord/${cod_locatie}`, {
+      await fetch(`http://localhost:3001/api/sud/detaliiCursaSud/${id}`, {
         method: 'DELETE',
       });
       setOpenDeleteDialog(false);
-      setSelectedLocatie(null);
-      fetchLocatii();
+      setSelectedDetaliu(null);
+      fetchDetaliiCurse();
     } catch (error) {
-      console.error('Error deleting locatie:', error);
+      console.error('Error deleting detalii cursa:', error);
     }
   };
 
@@ -115,20 +119,22 @@ const LocatiiNordManagement = () => {
         <Paper sx={{ p: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
             <Typography variant="h5" component="h2">
-              Management Locații
+              Management Detalii Curse
             </Typography>
             <Button
               variant="contained"
               onClick={() => {
-                setSelectedLocatie(null);
+                setSelectedDetaliu(null);
                 setFormData({
-                  localitate: '',
-                  judet: ''
+                  cod_cursa: 1,
+                  data_cursa: '',
+                  nota_sofer: 1,
+                  nota_client: 1
                 });
                 setOpenDialog(true);
               }}
             >
-              Adaugă Locație
+              Adaugă Detalii Cursă
             </Button>
           </Box>
 
@@ -136,24 +142,28 @@ const LocatiiNordManagement = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Cod Locație</TableCell>
-                  <TableCell>Localitate</TableCell>
-                  <TableCell>Județ</TableCell>
+                  <TableCell>Cod Cursă</TableCell>
+                  <TableCell>Data Cursă</TableCell>
+                  <TableCell>Nota Șofer</TableCell>
+                  <TableCell>Nota Client</TableCell>
                   <TableCell>Acțiuni</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {locatii.map((locatie) => (
-                  <TableRow key={locatie.cod_locatie}>
-                    <TableCell>{locatie.cod_locatie}</TableCell>
-                    <TableCell>{locatie.localitate}</TableCell>
-                    <TableCell>{locatie.judet}</TableCell>
+                {detaliiCurse.map((detaliu) => (
+                  <TableRow key={detaliu.id}>
+                    <TableCell>{detaliu.cod_cursa}</TableCell>
+                    <TableCell>
+                      {new Date(detaliu.data_cursa).toLocaleString()}
+                    </TableCell>
+                    <TableCell>{detaliu.nota_sofer}</TableCell>
+                    <TableCell>{detaliu.nota_client}</TableCell>
                     <TableCell>
                       <Stack direction="row" spacing={1}>
                         <IconButton
                           size="small"
                           color="primary"
-                          onClick={() => handleEdit(locatie)}
+                          onClick={() => handleEdit(detaliu)}
                         >
                           <EditIcon />
                         </IconButton>
@@ -161,7 +171,7 @@ const LocatiiNordManagement = () => {
                           size="small"
                           color="error"
                           onClick={() => {
-                            setSelectedLocatie(locatie);
+                            setSelectedDetaliu(detaliu);
                             setOpenDeleteDialog(true);
                           }}
                         >
@@ -179,11 +189,11 @@ const LocatiiNordManagement = () => {
           <Dialog 
             open={openDialog} 
             onClose={() => setOpenDialog(false)}
-            maxWidth="sm"
+            maxWidth="md"
             fullWidth
           >
             <DialogTitle>
-              {selectedLocatie ? 'Editează Locație' : 'Adaugă Locație Nouă'}
+              {selectedDetaliu ? 'Editează Detalii Cursă' : 'Adaugă Detalii Cursă Nouă'}
             </DialogTitle>
             <DialogContent>
               <Box
@@ -191,22 +201,45 @@ const LocatiiNordManagement = () => {
                 sx={{
                   '& .MuiTextField-root': { m: 1 },
                   mt: 2,
-                  display: 'flex',
-                  flexDirection: 'column',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, 1fr)',
                   gap: 2
                 }}
               >
                 <TextField
-                  label="Localitate"
-                  name="localitate"
-                  value={formData.localitate}
+                  label="Cod Cursă"
+                  name="cod_cursa"
+                  type="number"
+                  value={formData.cod_cursa}
                   onChange={handleInputChange}
                   fullWidth
                 />
                 <TextField
-                  label="Județ"
-                  name="judet"
-                  value={formData.judet}
+                  label="Data Cursă"
+                  name="data_cursa"
+                  type="datetime-local"
+                  value={formData.data_cursa}
+                  onChange={handleInputChange}
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <TextField
+                  label="Nota Șofer"
+                  name="nota_sofer"
+                  type="number"
+                  inputProps={{ min: 1, max: 10 }}
+                  value={formData.nota_sofer}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+                <TextField
+                  label="Nota Client"
+                  name="nota_client"
+                  type="number"
+                  inputProps={{ min: 1, max: 10 }}
+                  value={formData.nota_client}
                   onChange={handleInputChange}
                   fullWidth
                 />
@@ -215,7 +248,7 @@ const LocatiiNordManagement = () => {
             <DialogActions>
               <Button onClick={() => setOpenDialog(false)}>Anulează</Button>
               <Button onClick={handleSubmit} variant="contained">
-                {selectedLocatie ? 'Salvează' : 'Adaugă'}
+                {selectedDetaliu ? 'Salvează' : 'Adaugă'}
               </Button>
             </DialogActions>
           </Dialog>
@@ -228,13 +261,13 @@ const LocatiiNordManagement = () => {
             <DialogTitle>Confirmă ștergerea</DialogTitle>
             <DialogContent>
               <Typography>
-                Ești sigur că vrei să ștergi această locație? Această acțiune nu poate fi anulată.
+                Ești sigur că vrei să ștergi aceste detalii ale cursei? Această acțiune nu poate fi anulată.
               </Typography>
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setOpenDeleteDialog(false)}>Anulează</Button>
               <Button 
-                onClick={() => handleDelete(selectedLocatie?.cod_locatie)}
+                onClick={() => handleDelete(selectedDetaliu?.cod_cursa)}
                 color="error"
                 variant="contained"
               >
@@ -244,9 +277,9 @@ const LocatiiNordManagement = () => {
           </Dialog>
         </Paper>
       </Container>
-      <Footer/>
-    </div>
+      <Footer />
+  </div>
   );
 };
 
-export default LocatiiNordManagement;
+export default DetaliiCursaSudManagement;

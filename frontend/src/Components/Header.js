@@ -9,7 +9,9 @@ const Header = () => {
         { name: "Angajat Nord", path: "/angajatNord" },
         { name: "Cursa Nord", path: "/cursaNord" },
         { name: "Detalii Cursa Nord", path: "/getcursaNord" },
-        { name: "Locatii Nord", path: "/locatiiNord" }
+        { name: "Locatii Nord", path: "/locatiiNord" },
+        { name: "Angajat Contact Nord", path: "/angajatContactNord"},
+        { name: "Client Contact Nord", path: "/clientContactNord" }
       ]
     },
     {
@@ -18,7 +20,9 @@ const Header = () => {
         { name: "Angajat Sud", path: "/angajatSud" },
         { name: "Cursa Sud", path: "/cursaSud" },
         { name: "Detalii Cursa Sud", path: "/getcursaSud" },
-        { name: "Locatii Sud", path: "/locatiiSud" }
+        { name: "Locatii Sud", path: "/locatiiSud" },
+        { name: "Angajat Contact Sud", path: "/angajatContactSud"},
+        { name: "Client Contact Sud", path: "/clientContactSud" }
       ]
     },
     {
@@ -27,7 +31,16 @@ const Header = () => {
         { name: "Angajat Central", path: "/angajatCentral" },
         { name: "Cursa Central", path: "/cursaCentral" },
         { name: "Detalii Cursa Central", path: "/getcursaCentral" },
-        { name: "Locatii Central", path: "/locatiiCentral" }
+        { name: "Locatii Central", path: "/locatiiCentral" },
+        { name: "Angajat Identity", path: "/angajatIdentity"},
+        { name: "Client Identity", path: "/clientIdentity" }
+      ]
+    },
+    {
+      name: "Arhivă",
+      dropdown: [
+        { name: "Angajat HR", path: "/angajatHR" },
+        { name: "Client Profil", path: "/clientProfil" }
       ]
     },
     { name: "Angajati", path: "/angajat" },

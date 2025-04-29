@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from './Header';
-import Footer from './Footer';
+import Header from '../Header';
+import Footer from '../Footer';
 import {
   Table,
   TableBody,
@@ -26,7 +26,7 @@ import {
   Delete as DeleteIcon
 } from '@mui/icons-material';
 
-const LocatiiSudManagement = () => {
+const LocatiiCentralManagement = () => {
   const [locatii, setLocatii] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -42,7 +42,7 @@ const LocatiiSudManagement = () => {
 
   const fetchLocatii = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/sud/locatiiSud');
+      const response = await fetch('http://localhost:3001/api/central/locatiiCentral');
       const data = await response.json();
       setLocatii(data);
     } catch (error) {
@@ -61,8 +61,8 @@ const LocatiiSudManagement = () => {
   const handleSubmit = async () => {
     try {
       const url = selectedLocatie 
-        ? `http://localhost:3001/api/sud/locatiiSud/${selectedLocatie.cod_locatie}`
-        : 'http://localhost:3001/api/sud/locatiiSud';
+        ? `http://localhost:3001/api/central/locatiiCentral/${selectedLocatie.cod_locatie}`
+        : 'http://localhost:3001/api/central/locatiiCentral';
       
       const method = selectedLocatie ? 'PUT' : 'POST';
       
@@ -97,7 +97,7 @@ const LocatiiSudManagement = () => {
 
   const handleDelete = async (cod_locatie) => {
     try {
-      await fetch(`http://localhost:3001/api/sud/locatiiSud/${cod_locatie}`, {
+      await fetch(`http://localhost:3001/api/central/locatiiCentral/${cod_locatie}`, {
         method: 'DELETE',
       });
       setOpenDeleteDialog(false);
@@ -249,4 +249,4 @@ const LocatiiSudManagement = () => {
   );
 };
 
-export default LocatiiSudManagement;
+export default LocatiiCentralManagement;

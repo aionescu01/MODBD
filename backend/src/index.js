@@ -16,24 +16,33 @@ const istoricSoferiRoutes = require("./routes/oltp/istoricSoferi");
 const locatiiRoutes = require("./routes/oltp/locatii");
 const lucreazaInRoutes = require("./routes/oltp/lucreazaIn");
 const masinaRoutes = require("./routes/oltp/masina");
-const mesajRoutes = require("./routes/oltp/mesaj");
 
 const angajatNordRoutes = require("./routes/nord/angajatNord");
 const cursaNordRoutes = require("./routes/nord/cursaNord");
 const detaliiCursaNordRoutes = require("./routes/nord/detaliiCursaNord");
 const locatiiNordRoutes = require("./routes/nord/locatiiNord");
+const angajatContactNordRoutes = require("./routes/nord/angajatContact");
+const clientContactNordRoutes = require("./routes/nord/clientContact");
 
 const angajatSudRoutes = require("./routes/sud/angajatSud");
 const cursaSudRoutes = require("./routes/sud/cursaSud");
 const detaliiCursaSudRoutes = require("./routes/sud/detaliiCursaSud");
 const locatiiSudRoutes = require("./routes/sud/locatiiSud");
+const angajatContactSudRoutes = require("./routes/sud/angajatContact");
+const clientContactSudRoutes = require("./routes/sud/clientContact");
 
 const angajatCentralRoutes = require("./routes/central/angajatCentral");
 const cursaCentralRoutes = require("./routes/central/cursaCentral");
 const detaliiCursaCentralRoutes = require("./routes/central/detaliiCursaCentral");
 const locatiiCentralRoutes = require("./routes/central/locatiiCentral");
+const angajatIdentityRoutes = require("./routes/central/angajatIdentity");
+const clientIdentityRoutes = require("./routes/central/clientIdentity");
 
-const { sequelizeOLTP, sequelizeNORD, sequelizeSUD, sequelizeCENTRAL } = require("./config/database");
+const mesajRoutes = require("./routes/arhiva/mesaj");
+const angajatHRRoutes = require("./routes/arhiva/angajatHR");
+const clientProfilRoutes = require("./routes/arhiva/clientProfil");
+
+const { sequelizeOLTP, sequelizeNORD, sequelizeSUD, sequelizeCENTRAL, sequelizeARHIVA } = require("./config/database");
 
 require("./models/oltp/associations");
 
@@ -58,22 +67,31 @@ app.use("/api/oltp/istoricSoferi", istoricSoferiRoutes);
 app.use("/api/oltp/locatii", locatiiRoutes);
 app.use("/api/oltp/lucreazaIn", lucreazaInRoutes);
 app.use("/api/oltp/masina", masinaRoutes);
-app.use("/api/oltp/mesaj", mesajRoutes);
 
 app.use("/api/nord/angajatNord", angajatNordRoutes);
 app.use("/api/nord/cursaNord", cursaNordRoutes);
 app.use("/api/nord/detaliiCursaNord", detaliiCursaNordRoutes);
 app.use("/api/nord/locatiiNord", locatiiNordRoutes);
+app.use("/api/nord/angajatContactNord", angajatContactNordRoutes);
+app.use("/api/nord/clientContactNord", clientContactNordRoutes);
 
 app.use("/api/sud/angajatSud", angajatSudRoutes);
 app.use("/api/sud/cursaSud", cursaSudRoutes);
 app.use("/api/sud/detaliiCursaSud", detaliiCursaSudRoutes);
 app.use("/api/sud/locatiiSud", locatiiSudRoutes);
+app.use("/api/sud/angajatContactSud", angajatContactSudRoutes);
+app.use("/api/sud/clientContactSud", clientContactSudRoutes);
 
 app.use("/api/central/angajatCentral", angajatCentralRoutes);
 app.use("/api/central/cursaCentral", cursaCentralRoutes);
 app.use("/api/central/detaliiCursaCentral", detaliiCursaCentralRoutes);
 app.use("/api/central/locatiiCentral", locatiiCentralRoutes);
+app.use("/api/central/angajatIdentity", angajatIdentityRoutes);
+app.use("/api/central/clientIdentity", clientIdentityRoutes);
+
+app.use("/api/arhiva/mesaj", mesajRoutes);
+app.use("/api/arhiva/angajathr", angajatHRRoutes);
+app.use("/api/arhiva/clientprofil", clientProfilRoutes);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
@@ -87,7 +105,7 @@ async function addMessageToDatabase(message, messageType, createdBy) {
       );
     }
 
-    await sequelizeOLTP.models.Mesaj.create({
+    await sequelizeARHIVA.models.Mesaj.create({
       MESSAGE: message,
       MESSAGE_TYPE: messageType,
       CREATED_BY: createdBy,
@@ -116,6 +134,9 @@ async function runSQLScript(sequelize, filePath, message) {
 
 async function syncDatabases() {
   try {
+    await sequelizeARHIVA.sync({ force: true });
+    await addMessageToDatabase("Baza de date ARHIVA sincronizata cu succes!", "I", "Admin");
+
     await sequelizeOLTP.sync({ force: true });
     await addMessageToDatabase("Baza de date OLTP sincronizata cu succes!", "I", "Admin");
 
@@ -123,7 +144,7 @@ async function syncDatabases() {
 
     await insertInitialDataOLTP();
 
-    await runSQLScript(sequelizeOLTP, './scripts/oltp-add-constraints.sql', 'adaugare constrangeri tabele OLTP');
+    await runSQLScript(sequelizeARHIVA, './scripts/oltp-add-constraints.sql', 'adaugare constrangeri tabele OLTP');
     await runSQLScript(sequelizeOLTP, './scripts/oltp-grant-permissions-tables-users.sql', 'adaugare permisiuni tabele OLTP');
 
     await sequelizeNORD.sync({ force: true });
@@ -140,6 +161,8 @@ async function syncDatabases() {
     await addMessageToDatabase("Baza de date CENTRAL sincronizata cu succes!", "I", "Admin");
 
     await insertInitialDataCENTRAL();
+
+    await insertInitialDataARHIVA();
 
     app.listen(PORT, () =>
       console.log(`DB ruleaza pe portul ${PORT}`)
@@ -200,7 +223,6 @@ async function insertInitialDataOLTP() {
         { localitate: 'Craiova', judet: 'Dolj' },
         { localitate: 'Oradea', judet: 'Bihor' },
         { localitate: 'Voluntari', judet: 'Ilfov' },
-        { localitate: 'Arad', judet: 'Arad' },
         { localitate: 'Alba Iulia', judet: 'Alba' },
         { localitate: 'Alexandria', judet: 'Teleorman' },
         { localitate: 'Bacău', judet: 'Bacău' },
@@ -230,7 +252,6 @@ async function insertInitialDataOLTP() {
         { localitate: 'Târgu Jiu', judet: 'Gorj' },
         { localitate: 'Târgu Mureș', judet: 'Mureș' },
         { localitate: 'Tulcea', judet: 'Tulcea' },
-        { localitate: 'Vaslui', judet: 'Vaslui' },
         { localitate: 'Zalău', judet: 'Sălaj' }
       ]);      
 
@@ -525,9 +546,65 @@ async function insertInitialDataNORD() {
       await sequelizeNORD.models.DetaliiCursaNord.bulkCreate(detaliiFiltrate);
     }
 
+    const existingAngajatiContactNord = await sequelizeNORD.models.AngajatContactNord.findAll();
+
+    if (existingAngajatiContactNord.length === 0) {
+
+      const angajatiNordRaw = await sequelizeOLTP.models.Angajat.findAll({
+        include: [{
+          model: sequelizeOLTP.models.Locatii,
+          required: true,
+          through: { attributes: [] },
+          where: {
+            judet: ["Suceava", "Botoșani", "Iași", "Neamț", "Bistrița-Năsăud", "Satu Mare", "Maramureș", "Sălaj", "Bihor", "Cluj", "Timiș", "Brașov", "Arad", "Sibiu", "Alba", "Bacău", "Hunedoara", "Galați", "Harghita", "Covasna", "Mureș", "Vaslui"]
+          }
+        }],
+        attributes: ['cod_angajat', 'nr_telefon', 'tip_angajat', 'dispecerat']
+      });
+
+      const angajatiNord = angajatiNordRaw.map(({ cod_angajat, nr_telefon, tip_angajat, dispecerat }) => ({
+        cod_angajat,
+        nr_telefon,
+        tip_angajat,
+        dispecerat
+      }));
+    
+      await sequelizeNORD.models.AngajatContactNord.bulkCreate(angajatiNord);
+
+    }
+
+    const existingClientiContactNord = await sequelizeNORD.models.ClientContactNord.findAll();
+
+    if (existingClientiContactNord.length === 0) {
+
+      const clientiNordRaw = await sequelizeOLTP.models.Client.findAll({
+        include: [{
+          model: sequelizeOLTP.models.Cursa,
+          required: true,
+          include: [{
+            model: sequelizeOLTP.models.Locatii,
+            required: true,
+            where: {
+              judet: ["Suceava", "Botoșani", "Iași", "Neamț", "Bistrița-Năsăud", "Satu Mare", "Maramureș", "Sălaj", "Bihor", "Cluj", "Timiș", "Brașov", "Arad", "Sibiu", "Alba", "Bacău", "Hunedoara", "Galați", "Harghita", "Covasna", "Mureș", "Vaslui"]
+            }
+          }]
+        }],
+        attributes: ['cod_client', 'nr_telefon', 'apelativ']
+      });
+
+      const clientiNord = clientiNordRaw.map(client => ({
+        cod_client: client.cod_client,
+        nr_telefon: client.nr_telefon,
+        apelativ: client.apelativ
+      }));
+    
+      await sequelizeNORD.models.ClientContactNord.bulkCreate(clientiNord);
+
+    }
+
     await sequelizeNORD.query('COMMIT;');
 
-    if (existingAngajatiNord.length == 0 || existingCurseNord.length == 0 || existingLocatiiNord.length == 0 || existingDetaliiCurseNord == 0){
+    if (existingAngajatiNord.length == 0 || existingCurseNord.length == 0 || existingLocatiiNord.length == 0 || existingDetaliiCurseNord == 0 || existingAngajatiContactNord.length == 0 || existingClientiContactNord.length == 0){
       await addMessageToDatabase("Datele initiale au fost inserate cu succes in baza de date NORD!", "I", "Admin");
     }
   } catch (err) {
@@ -546,7 +623,7 @@ async function insertInitialDataSUD() {
 
       const locatii = await sequelizeOLTP.models.Locatii.findAll({
         where: {
-            judet: ["București", "Ilfov", "Dâmbovița", "Prahova", "Argeș", "Giurgiu", "Teleorman", "Ialomița", "Călărași", "Brăila", "Vrancea", "Dolj", "Olt", "Mehedinți", "Gorj", "Vâlcea", "Caraș-Severin", "Constanța", "Tulcea"],
+            judet: ["București", "Ilfov", "Dâmbovița", "Prahova", "Argeș", "Giurgiu", "Teleorman", "Ialomița", "Călărași", "Brăila", "Vrancea", "Dolj", "Olt", "Mehedinți", "Gorj", "Vâlcea", "Caraș-Severin", "Constanța", "Tulcea", "Buzău"],
         },
         raw: true,
       });
@@ -566,7 +643,7 @@ async function insertInitialDataSUD() {
             through: { attributes: [] },
             where: {
                 judet: [
-                    "București", "Ilfov", "Dâmbovița", "Prahova", "Argeș", "Giurgiu", 
+                    "București", "Ilfov", "Dâmbovița", "Prahova", "Argeș", "Giurgiu", "Buzău", 
                     "Teleorman", "Ialomița", "Călărași", "Brăila", "Vrancea", "Dolj", 
                     "Olt", "Mehedinți", "Gorj", "Vâlcea", "Caraș-Severin", "Constanța", "Tulcea"
                 ],
@@ -606,9 +683,65 @@ async function insertInitialDataSUD() {
       await sequelizeSUD.models.DetaliiCursaSud.bulkCreate(detaliiFiltrate);
     }
 
+    const existingAngajatiContactSud = await sequelizeSUD.models.AngajatContactSud.findAll();
+
+    if (existingAngajatiContactSud.length === 0) {
+
+      const angajatiSudRaw = await sequelizeOLTP.models.Angajat.findAll({
+        include: [{
+          model: sequelizeOLTP.models.Locatii,
+          required: true,
+          through: { attributes: [] },
+          where: {
+            judet: ["București", "Ilfov", "Dâmbovița", "Prahova", "Argeș", "Giurgiu", "Teleorman", "Ialomița", "Călărași", "Brăila", "Vrancea", "Dolj", "Olt", "Mehedinți", "Gorj", "Vâlcea", "Caraș-Severin", "Constanța", "Tulcea", "Buzău"]
+          }
+        }],
+        attributes: ['cod_angajat', 'nr_telefon', 'tip_angajat', 'dispecerat']
+      });
+
+      const angajatiSud = angajatiSudRaw.map(({ cod_angajat, nr_telefon, tip_angajat, dispecerat }) => ({
+        cod_angajat,
+        nr_telefon,
+        tip_angajat,
+        dispecerat
+      }));
+    
+      await sequelizeSUD.models.AngajatContactSud.bulkCreate(angajatiSud);
+
+    }
+
+    const existingClientiContactSud = await sequelizeSUD.models.ClientContactSud.findAll();
+
+    if (existingClientiContactSud.length === 0) {
+
+      const clientiSudRaw = await sequelizeOLTP.models.Client.findAll({
+        include: [{
+          model: sequelizeOLTP.models.Cursa,
+          required: true,
+          include: [{
+            model: sequelizeOLTP.models.Locatii,
+            required: true,
+            where: {
+              judet: ["București", "Ilfov", "Dâmbovița", "Prahova", "Argeș", "Giurgiu", "Teleorman", "Ialomița", "Călărași", "Brăila", "Vrancea", "Dolj", "Olt", "Mehedinți", "Gorj", "Vâlcea", "Caraș-Severin", "Constanța", "Tulcea", "Buzău"]
+            }
+          }]
+        }],
+        attributes: ['cod_client', 'nr_telefon', 'apelativ']
+      });
+
+      const clientiSud = clientiSudRaw.map(client => ({
+        cod_client: client.cod_client,
+        nr_telefon: client.nr_telefon,
+        apelativ: client.apelativ
+      }));
+    
+      await sequelizeSUD.models.ClientContactSud.bulkCreate(clientiSud);
+
+    }
+
     await sequelizeSUD.query('COMMIT;');
 
-    if (existingAngajatiSud.length == 0 || existingCurseSud.length == 0 || existingLocatiiSud.length == 0 || existingDetaliiCurseSud == 0){
+    if (existingAngajatiSud.length == 0 || existingCurseSud.length == 0 || existingLocatiiSud.length == 0 || existingDetaliiCurseSud == 0 || existingAngajatiContactSud.length == 0 || existingClientiContactSud.length == 0){
       await addMessageToDatabase("Datele initiale au fost inserate cu succes in baza de date SUD!", "I", "Admin");
     }
   } catch (err) {
@@ -629,7 +762,7 @@ async function insertInitialDataCENTRAL() {
         where: {
           judet: {
             [Op.notIn]: [
-              "Botoșani", "Suceava", "Bistrița-Năsăud", "Satu Mare", "Maramureș", "Iași",
+              "Botoșani", "Suceava", "Bistrița-Năsăud", "Satu Mare", "Maramureș", "Iași", "Buzău",
               "Neamț", "Bihor", "Sălaj", "București", "Ilfov", "Dâmbovița", "Prahova", "Argeș",
               "Giurgiu", "Teleorman", "Ialomița", "Călărași", "Brăila", "Vrancea", "Dolj", 
               "Olt", "Mehedinți", "Gorj", "Vâlcea", "Caraș-Severin", "Constanța", "Tulcea"
@@ -655,7 +788,7 @@ async function insertInitialDataCENTRAL() {
             where: {
                 judet: {
                     [Op.notIn]: [
-                        "Botoșani", "Suceava", "Bistrița-Năsăud", "Satu Mare", "Maramureș", "Iași",
+                        "Botoșani", "Suceava", "Bistrița-Năsăud", "Satu Mare", "Maramureș", "Iași", "Buzău",
                         "Neamț", "Bihor", "Sălaj", "București", "Ilfov", "Dâmbovița", "Prahova", 
                         "Argeș", "Giurgiu", "Teleorman", "Ialomița", "Călărași", "Brăila", "Vrancea", 
                         "Dolj", "Olt", "Mehedinți", "Gorj", "Vâlcea", "Caraș-Severin", "Constanța", "Tulcea"
@@ -697,14 +830,85 @@ async function insertInitialDataCENTRAL() {
       await sequelizeCENTRAL.models.DetaliiCursaCentral.bulkCreate(detaliiFiltrate);
     }
 
+    const existingAngajatiIdentity = await sequelizeCENTRAL.models.AngajatIdentity.findAll();
+
+    if (existingAngajatiIdentity.length === 0) {
+
+      const angajatiRaw = await sequelizeOLTP.models.Angajat.findAll({
+        attributes: ['cod_angajat', 'nume', 'prenume']
+      });
+      
+      const angajati = angajatiRaw.map(a => a.toJSON());
+      
+      await sequelizeCENTRAL.models.AngajatIdentity.bulkCreate(angajati);
+
+    }
+
+    const existingClientiIdentity = await sequelizeCENTRAL.models.ClientIdentity.findAll();
+
+    if (existingClientiIdentity.length === 0) {
+
+      const clientiRaw = await sequelizeOLTP.models.Client.findAll({
+        attributes: ['cod_client', 'nume', 'prenume']
+      });
+      
+      const clienti = clientiRaw.map(a => a.toJSON());
+      
+      await sequelizeCENTRAL.models.ClientIdentity.bulkCreate(clienti);
+
+    }
+
     await sequelizeCENTRAL.query('COMMIT;');
 
-    if (existingAngajatiCentral.length == 0 || existingCurseCentral.length == 0 || existingLocatiiCentral.length == 0 || existingDetaliiCurseCentral == 0){
+    if (existingAngajatiCentral.length == 0 || existingCurseCentral.length == 0 || existingLocatiiCentral.length == 0 || existingDetaliiCurseCentral == 0 || existingAngajatiIdentity.length == 0 || existingClientiIdentity == 0){
       await addMessageToDatabase("Datele initiale au fost inserate cu succes in baza de date CENTRAL!", "I", "Admin");
     }
   } catch (err) {
     console.log(err);
 
     await addMessageToDatabase("Eroare la inserarea datelor initiale pentru CENTRAL", "E", "Admin");
+  }
+}
+
+async function insertInitialDataARHIVA() {
+  try {
+
+    const existingAngajatiHR = await sequelizeARHIVA.models.AngajatHR.findAll();
+
+    if (existingAngajatiHR.length === 0) {
+
+      const angajatiRaw = await sequelizeOLTP.models.Angajat.findAll({
+        attributes: ['cod_angajat', 'data_nastere', 'data_angajare', 'salariu', 'cod_masina']
+      });
+      
+      const angajati = angajatiRaw.map(a => a.toJSON());
+      
+      await sequelizeARHIVA.models.AngajatHR.bulkCreate(angajati);    
+
+    }
+
+    const existingClientiProfil = await sequelizeARHIVA.models.ClientProfil.findAll();
+
+    if (existingClientiProfil.length === 0) {
+
+      const clientiRaw = await sequelizeOLTP.models.Client.findAll({
+        attributes: ['cod_client', 'data_nastere', 'nota']
+      });
+      
+      const clienti = clientiRaw.map(a => a.toJSON());
+      
+      await sequelizeARHIVA.models.ClientProfil.bulkCreate(clienti);    
+
+    }
+
+    await sequelizeARHIVA.query('COMMIT;');
+
+    if (existingAngajatiHR.length == 0 || existingClientiProfil.length == 0){
+      await addMessageToDatabase("Datele initiale au fost inserate cu succes in baza de date ARHIVA!", "I", "Admin");
+    }
+  } catch (err) {
+    console.log(err);
+
+    await addMessageToDatabase("Eroare la inserarea datelor initiale pentru ARHIVA", "E", "Admin");
   }
 }

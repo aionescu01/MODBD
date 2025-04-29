@@ -1,21 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const { createMesaj, getAllMesaje, getMesajById, updateMesaj, deleteMesaj } = require("../../controllers/oltp/mesajController");
+const { createMesaj, getAllMesaje, getMesajById, updateMesaj, deleteMesaj } = require("../../controllers/arhiva/mesajController");
 
 /**
  * @swagger
  * tags:
- *   name: OLTP - Mesaj
+ *   name: ARHIVA - Mesaj
  *   description: API pentru gestionarea mesajelor
  */
 
 /**
  * @swagger
- * /api/oltp/mesaj:
+ * /api/arhiva/mesaj:
  *   post:
  *     summary: Creează un mesaj
  *     description: Adaugă un nou mesaj în baza de date.
- *     tags: [OLTP - Mesaj]
+ *     tags: [ARHIVA - Mesaj]
  *     requestBody:
  *       required: true
  *       content:
@@ -47,11 +47,11 @@ router.post("/", createMesaj);
 
 /**
  * @swagger
- * /api/oltp/mesaj:
+ * /api/arhiva/mesaj:
  *   get:
  *     summary: Preia toate mesajele
  *     description: Returnează lista completă a mesajelor din baza de date.
- *     tags: [OLTP - Mesaj]
+ *     tags: [ARHIVA - Mesaj]
  *     responses:
  *       200:
  *         description: Lista mesajelor.
@@ -85,11 +85,11 @@ router.get("/", getAllMesaje);
 
 /**
  * @swagger
- * /api/oltp/mesaj/{id}:
+ * /api/arhiva/mesaj/{id}:
  *   get:
  *     summary: Preia mesajul după ID
  *     description: Returnează detaliile unui mesaj specificat prin ID.
- *     tags: [OLTP - Mesaj]
+ *     tags: [ARHIVA - Mesaj]
  *     parameters:
  *       - name: id
  *         in: path
@@ -110,11 +110,11 @@ router.get("/:id", getMesajById);
 
 /**
  * @swagger
- * /api/oltp/mesaj/{id}:
+ * /api/arhiva/mesaj/{id}:
  *   put:
  *     summary: Actualizează un mesaj
  *     description: Actualizează detaliile unui mesaj specificat prin ID.
- *     tags: [OLTP - Mesaj]
+ *     tags: [ARHIVA - Mesaj]
  *     parameters:
  *       - name: id
  *         in: path
@@ -156,11 +156,11 @@ router.put("/:id", updateMesaj);
 
 /**
  * @swagger
- * /api/oltp/mesaj/{id}:
+ * /api/arhiva/mesaj/{id}:
  *   delete:
  *     summary: Șterge un mesaj
  *     description: Șterge un mesaj specificat prin ID din baza de date.
- *     tags: [OLTP - Mesaj]
+ *     tags: [ARHIVA - Mesaj]
  *     parameters:
  *       - name: id
  *         in: path

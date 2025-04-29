@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
-const { sequelizeOLTP } = require("../../config/database");
+const { sequelizeARHIVA } = require("../../config/database");
 
-const Mesaj = sequelizeOLTP.define("Mesaj", 
+const Mesaj = sequelizeARHIVA.define("Mesaj", 
   {
     MESSAGE_ID: {
       type: DataTypes.INTEGER,
@@ -30,7 +30,6 @@ const Mesaj = sequelizeOLTP.define("Mesaj",
   {
       freezeTableName: true,
       tableName: "MESAJ",
-      timestamps: false,
   }
 );
 

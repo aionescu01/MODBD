@@ -14,26 +14,36 @@ import LocatiiManagement from "./Components/Locatii";
 import LucreazaInManagement from "./Components/LucreazaIn";
 import MasiniManagement from "./Components/Masini";
 
-import AngajatNordManagement from "./Components/AngajatNord";
-import CurseNordManagement from "./Components/CursaNord";
-import DetaliiCursaNordManagement from "./Components/DetaliiCursaNord";
-import LocatiiNordManagement from "./Components/LocatiiNord";
+import AngajatNordManagement from "./Components/Nord/AngajatNord";
+import CurseNordManagement from "./Components/Nord/CursaNord";
+import DetaliiCursaNordManagement from "./Components/Nord/DetaliiCursaNord";
+import LocatiiNordManagement from "./Components/Nord/LocatiiNord";
+import AngajatContactNordManagement from "./Components/Nord/AngajatContactNord";
+import ClientContactNordManagement from "./Components/Nord/ClientContactNord";
 
-import AngajatSudManagement from "./Components/AngajatSud";
-import CurseSudManagement from "./Components/CursaSud";
-import DetaliiCursaSudManagement from "./Components/DetaliiCursaSud";
-import LocatiiSudManagement from "./Components/LocatiiSud";
+import AngajatSudManagement from "./Components/Sud/AngajatSud";
+import CurseSudManagement from "./Components/Sud/CursaSud";
+import DetaliiCursaSudManagement from "./Components/Sud/DetaliiCursaSud";
+import LocatiiSudManagement from "./Components/Sud/LocatiiSud";
+import AngajatContactSudManagement from "./Components/Sud/AngajatContactSud";
+import ClientContactSudManagement from "./Components/Sud/ClientContactSud";
 
-import AngajatCentralManagement from "./Components/AngajatCentral";
-import CurseCentralManagement from "./Components/CursaCentral";
-import DetaliiCursaCentralManagement from "./Components/DetaliiCursaCentral";
-import LocatiiCentralManagement from "./Components/LocatiiCentral";
+import AngajatCentralManagement from "./Components/Central/AngajatCentral";
+import CurseCentralManagement from "./Components/Central/CursaCentral";
+import DetaliiCursaCentralManagement from "./Components/Central/DetaliiCursaCentral";
+import LocatiiCentralManagement from "./Components/Central/LocatiiCentral";
+import AngajatIdentityManagement from "./Components/Central/AngajatIdentity";
+import ClientIdentityManagement from "./Components/Central/ClientIdentity";
+
+import AngajatHRManagement from "./Components/Arhiva/AngajatHR";
+import ClientProfilManagement from "./Components/Arhiva/ClientProfil";
 
 
 function App() {
   return (
     <Router>
       <Routes>
+        
         <Route path="/" element={<Home/>} />
         <Route path="/angajat" element={<AngajatManagement />} />
         <Route path="/client" element={<ClientManagement />} />
@@ -50,16 +60,26 @@ function App() {
         <Route path="/cursaNord" element={<CurseNordManagement />} />
         <Route path="/getcursaNord" element={<DetaliiCursaNordManagement />} />
         <Route path="/locatiiNord" element={<LocatiiNordManagement />} />
+        <Route path="/angajatContactNord" element={<AngajatContactNordManagement />} />
+        <Route path="/clientContactNord" element={<ClientContactNordManagement />} />
 
         <Route path="/angajatSud" element={<AngajatSudManagement />} />
         <Route path="/cursaSud" element={<CurseSudManagement />} />
         <Route path="/getcursaSud" element={<DetaliiCursaSudManagement />} />
         <Route path="/locatiiSud" element={<LocatiiSudManagement />} />
+        <Route path="/angajatContactSud" element={<AngajatContactSudManagement />} />
+        <Route path="/clientContactSud" element={<ClientContactSudManagement />} />
 
         <Route path="/angajatCentral" element={<AngajatCentralManagement />} />
         <Route path="/cursaCentral" element={<CurseCentralManagement />} />
         <Route path="/getcursaCentral" element={<DetaliiCursaCentralManagement />} />
         <Route path="/locatiiCentral" element={<LocatiiCentralManagement />} />
+        <Route path="/angajatIdentity" element={<AngajatIdentityManagement />} />
+        <Route path="/clientIdentity" element={<ClientIdentityManagement />} />
+
+        <Route path="/angajatHR" element={<AngajatHRManagement />} />
+        <Route path="/clientProfil" element={<ClientProfilManagement />} />
+
       </Routes>
     </Router>
   );

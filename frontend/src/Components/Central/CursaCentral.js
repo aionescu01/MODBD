@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from './Header';
-import Footer from './Footer';
+import Header from '../Header';
+import Footer from '../Footer';
 import {
   Table,
   TableBody,
@@ -26,29 +26,31 @@ import {
   Delete as DeleteIcon
 } from '@mui/icons-material';
 
-const DetaliiCursaSudManagement = () => {
-  const [detaliiCurse, setDetaliiCurse] = useState([]);
+const CurseCentralManagement = () => {
+  const [curse, setCurse] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [selectedDetaliu, setSelectedDetaliu] = useState(null);
+  const [selectedCursa, setSelectedCursa] = useState(null);
   const [formData, setFormData] = useState({
-    cod_cursa: 1,
-    data_cursa: '',
-    nota_sofer: 1,
-    nota_client: 1
+    cod_masina: '',
+    cod_sofer: '',
+    cod_client: '',
+    adresa_client: '',
+    destinatie: '',
+    cod_locatie: ''
   });
 
   useEffect(() => {
-    fetchDetaliiCurse();
+    fetchCurse();
   }, []);
 
-  const fetchDetaliiCurse = async () => {
+  const fetchCurse = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/sud/detaliiCursaSud');
+      const response = await fetch('http://localhost:3001/api/central/cursaCentral');
       const data = await response.json();
-      setDetaliiCurse(data);
+      setCurse(data);
     } catch (error) {
-      console.error('Error fetching detalii curse:', error);
+      console.error('Error fetching curse:', error);
     }
   };
 
@@ -62,11 +64,11 @@ const DetaliiCursaSudManagement = () => {
 
   const handleSubmit = async () => {
     try {
-      const url = selectedDetaliu 
-        ? `http://localhost:3001/api/sud/detaliiCursaSud/${selectedDetaliu.cod_cursa}`
-        : 'http://localhost:3001/api/sud/detaliiCursaSud';
+      const url = selectedCursa 
+        ? `http://localhost:3001/api/central/cursaCentral/${selectedCursa.cod_cursa}`
+        : 'http://localhost:3001/api/central/cursaCentral';
       
-      const method = selectedDetaliu ? 'PUT' : 'POST';
+      const method = selectedCursa ? 'PUT' : 'POST';
       
       await fetch(url, {
         method,
@@ -77,38 +79,37 @@ const DetaliiCursaSudManagement = () => {
       });
       
       setOpenDialog(false);
-      setSelectedDetaliu(null);
+      setSelectedCursa(null);
       setFormData({
-        cod_cursa: 1,
-        data_cursa: '',
-        nota_sofer: 1,
-        nota_client: 1
+        cod_masina: '',
+        cod_sofer: '',
+        cod_client: '',
+        adresa_client: '',
+        destinatie: '',
+        cod_locatie: ''
       });
-      fetchDetaliiCurse();
+      fetchCurse();
     } catch (error) {
-      console.error('Error saving detalii cursa:', error);
+      console.error('Error saving cursa:', error);
     }
   };
 
-  const handleEdit = (detaliu) => {
-    setSelectedDetaliu(detaliu);
-    setFormData({
-      ...detaliu,
-      data_cursa: detaliu.data_cursa.slice(0, 16) // Format datetime-local
-    });
+  const handleEdit = (cursa) => {
+    setSelectedCursa(cursa);
+    setFormData(cursa);
     setOpenDialog(true);
   };
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:3001/api/sud/detaliiCursaSud/${id}`, {
+      await fetch(`http://localhost:3001/api/central/cursaCentral/${id}`, {
         method: 'DELETE',
       });
       setOpenDeleteDialog(false);
-      setSelectedDetaliu(null);
-      fetchDetaliiCurse();
+      setSelectedCursa(null);
+      fetchCurse();
     } catch (error) {
-      console.error('Error deleting detalii cursa:', error);
+      console.error('Error deleting cursa:', error);
     }
   };
 
@@ -119,22 +120,24 @@ const DetaliiCursaSudManagement = () => {
         <Paper sx={{ p: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
             <Typography variant="h5" component="h2">
-              Management Detalii Curse
+              Management Curse
             </Typography>
             <Button
               variant="contained"
               onClick={() => {
-                setSelectedDetaliu(null);
+                setSelectedCursa(null);
                 setFormData({
-                  cod_cursa: 1,
-                  data_cursa: '',
-                  nota_sofer: 1,
-                  nota_client: 1
+                  cod_masina: '',
+                  cod_sofer: '',
+                  cod_client: '',
+                  adresa_client: '',
+                  destinatie: '',
+                  cod_locatie: ''
                 });
                 setOpenDialog(true);
               }}
             >
-              Adaugă Detalii Cursă
+              Adaugă Cursă
             </Button>
           </Box>
 
@@ -142,28 +145,30 @@ const DetaliiCursaSudManagement = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Cod Cursă</TableCell>
-                  <TableCell>Data Cursă</TableCell>
-                  <TableCell>Nota Șofer</TableCell>
-                  <TableCell>Nota Client</TableCell>
+                  <TableCell>Cod Mașină</TableCell>
+                  <TableCell>Cod Șofer</TableCell>
+                  <TableCell>Cod Client</TableCell>
+                  <TableCell>Adresa Client</TableCell>
+                  <TableCell>Destinație</TableCell>
+                  <TableCell>Cod Locație</TableCell>
                   <TableCell>Acțiuni</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {detaliiCurse.map((detaliu) => (
-                  <TableRow key={detaliu.id}>
-                    <TableCell>{detaliu.cod_cursa}</TableCell>
-                    <TableCell>
-                      {new Date(detaliu.data_cursa).toLocaleString()}
-                    </TableCell>
-                    <TableCell>{detaliu.nota_sofer}</TableCell>
-                    <TableCell>{detaliu.nota_client}</TableCell>
+                {curse.map((cursa) => (
+                  <TableRow key={cursa.cod_cursa}>
+                    <TableCell>{cursa.cod_masina}</TableCell>
+                    <TableCell>{cursa.cod_sofer}</TableCell>
+                    <TableCell>{cursa.cod_client}</TableCell>
+                    <TableCell>{cursa.adresa_client}</TableCell>
+                    <TableCell>{cursa.destinatie}</TableCell>
+                    <TableCell>{cursa.cod_locatie}</TableCell>
                     <TableCell>
                       <Stack direction="row" spacing={1}>
                         <IconButton
                           size="small"
                           color="primary"
-                          onClick={() => handleEdit(detaliu)}
+                          onClick={() => handleEdit(cursa)}
                         >
                           <EditIcon />
                         </IconButton>
@@ -171,7 +176,7 @@ const DetaliiCursaSudManagement = () => {
                           size="small"
                           color="error"
                           onClick={() => {
-                            setSelectedDetaliu(detaliu);
+                            setSelectedCursa(cursa);
                             setOpenDeleteDialog(true);
                           }}
                         >
@@ -193,7 +198,7 @@ const DetaliiCursaSudManagement = () => {
             fullWidth
           >
             <DialogTitle>
-              {selectedDetaliu ? 'Editează Detalii Cursă' : 'Adaugă Detalii Cursă Nouă'}
+              {selectedCursa ? 'Editează Cursă' : 'Adaugă Cursă Nouă'}
             </DialogTitle>
             <DialogContent>
               <Box
@@ -207,39 +212,48 @@ const DetaliiCursaSudManagement = () => {
                 }}
               >
                 <TextField
-                  label="Cod Cursă"
-                  name="cod_cursa"
+                  label="Cod Mașină"
+                  name="cod_masina"
                   type="number"
-                  value={formData.cod_cursa}
+                  value={formData.cod_masina}
                   onChange={handleInputChange}
                   fullWidth
                 />
                 <TextField
-                  label="Data Cursă"
-                  name="data_cursa"
-                  type="datetime-local"
-                  value={formData.data_cursa}
-                  onChange={handleInputChange}
-                  fullWidth
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-                <TextField
-                  label="Nota Șofer"
-                  name="nota_sofer"
+                  label="Cod Șofer"
+                  name="cod_sofer"
                   type="number"
-                  inputProps={{ min: 1, max: 10 }}
-                  value={formData.nota_sofer}
+                  value={formData.cod_sofer}
                   onChange={handleInputChange}
                   fullWidth
                 />
                 <TextField
-                  label="Nota Client"
-                  name="nota_client"
+                  label="Cod Client"
+                  name="cod_client"
                   type="number"
-                  inputProps={{ min: 1, max: 10 }}
-                  value={formData.nota_client}
+                  value={formData.cod_client}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+                <TextField
+                  label="Adresa Client"
+                  name="adresa_client"
+                  value={formData.adresa_client}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+                <TextField
+                  label="Destinație"
+                  name="destinatie"
+                  value={formData.destinatie}
+                  onChange={handleInputChange}
+                  fullWidth
+                />
+                <TextField
+                  label="Cod Locație"
+                  name="cod_locatie"
+                  type="number"
+                  value={formData.cod_locatie}
                   onChange={handleInputChange}
                   fullWidth
                 />
@@ -248,7 +262,7 @@ const DetaliiCursaSudManagement = () => {
             <DialogActions>
               <Button onClick={() => setOpenDialog(false)}>Anulează</Button>
               <Button onClick={handleSubmit} variant="contained">
-                {selectedDetaliu ? 'Salvează' : 'Adaugă'}
+                {selectedCursa ? 'Salvează' : 'Adaugă'}
               </Button>
             </DialogActions>
           </Dialog>
@@ -261,13 +275,13 @@ const DetaliiCursaSudManagement = () => {
             <DialogTitle>Confirmă ștergerea</DialogTitle>
             <DialogContent>
               <Typography>
-                Ești sigur că vrei să ștergi aceste detalii ale cursei? Această acțiune nu poate fi anulată.
+                Ești sigur că vrei să ștergi această cursă? Această acțiune nu poate fi anulată.
               </Typography>
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setOpenDeleteDialog(false)}>Anulează</Button>
               <Button 
-                onClick={() => handleDelete(selectedDetaliu?.cod_cursa)}
+                onClick={() => handleDelete(selectedCursa?.cod_cursa)}
                 color="error"
                 variant="contained"
               >
@@ -277,9 +291,9 @@ const DetaliiCursaSudManagement = () => {
           </Dialog>
         </Paper>
       </Container>
-      <Footer />
-  </div>
+      <Footer/>
+    </div>
   );
 };
 
-export default DetaliiCursaSudManagement;
+export default CurseCentralManagement;

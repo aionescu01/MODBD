@@ -23,21 +23,32 @@ const Home = () => {
     { name: "Angajati Nord", path: "/angajatNord" },
     { name: "Curse Nord", path: "/cursaNord" },
     { name: "Detalii curse Nord", path: "/getcursaNord"},
-    { name: "Locatii Nord", path: "/locatiiNord" }
+    { name: "Locatii Nord", path: "/locatiiNord" },
+    { name: "Angajati Contact Nord", path: "/angajatContactNord"},
+    { name: "Clienți Contact Nord", path: "/clientContactNord" }
   ];
 
   const tablesSUD = [
     { name: "Angajati Sud", path: "/angajatSud" },
     { name: "Curse Sud", path: "/cursaSud" },
     { name: "Detalii curse Sud", path: "/getcursaSud"},
-    { name: "Locatii Sud", path: "/locatiiSud" }
+    { name: "Locatii Sud", path: "/locatiiSud" },
+    { name: "Angajati Contact Sud", path: "/angajatContactSud"},
+    { name: "Clienți Contact Sud", path: "/clientContactSud" }
   ];
 
   const tablesCENTRAL = [
     { name: "Angajati Central", path: "/angajatCentral" },
     { name: "Curse Central", path: "/cursaCentral" },
     { name: "Detalii curse Central", path: "/getcursaCentral"},
-    { name: "Locatii Central", path: "/locatiiCentral" }
+    { name: "Locatii Central", path: "/locatiiCentral" },
+    { name: "Angajați Identity", path: "/angajatIdentity"},
+    { name: "Clienți Identity", path: "/clientIdentity" }
+  ];
+
+  const tablesARHIVA = [
+    { name: "Angajati HR", path: "/angajatHR" },
+    { name: "Clienți Profil", path: "/clientProfil" }
   ];
 
   const images = [
@@ -118,6 +129,17 @@ const Home = () => {
 
         <div className="card-subcontainer">
           {tablesCENTRAL.map((table) => (
+            <div key={table.name} className="card">
+              <h2>{table.name}</h2>
+              <NavLink to={table.path} className="button">Vezi detalii</NavLink>
+            </div>
+          ))}
+        </div>
+
+        <br/>
+
+        <div className="card-subcontainer">
+          {tablesARHIVA.map((table) => (
             <div key={table.name} className="card">
               <h2>{table.name}</h2>
               <NavLink to={table.path} className="button">Vezi detalii</NavLink>
