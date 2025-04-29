@@ -2,7 +2,6 @@ const Angajat = require("./Angajat");
 const Client = require("./Client");
 const Cursa = require("./Cursa");
 const DetaliiCursa = require("./DetaliiCursa");
-const Discount = require("./Discount");
 const Factura = require("./Factura");
 const IstoricSofer = require("./IstoricSofer");
 const Locatii = require("./Locatii");

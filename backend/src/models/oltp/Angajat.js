@@ -46,6 +46,7 @@ const Angajat = sequelizeOLTP.define("Angajat",
     {
         freezeTableName: true,
         tableName: "ANGAJAT",
+        timestamps: false,
     }
 );
 

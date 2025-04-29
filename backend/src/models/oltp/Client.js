@@ -35,6 +35,7 @@ const Client = sequelizeOLTP.define("Client",
   {
       freezeTableName: true,
       tableName: "CLIENT",
+      timestamps: false,
   }
 );
 

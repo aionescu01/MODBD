@@ -27,6 +27,10 @@ services:
       - DB_PASS=admin
       - DB_DIALECT=oracle
       - DB_SID_OLTP=oltp
+      - DB_SID_SUD=sud
+      - DB_SID_NORD=nord
+      - DB_SID_CENTRAL=central
+      - DB_SID_ARHIVA=arhiva
     ports:
       - "3001:3001"
     depends_on:

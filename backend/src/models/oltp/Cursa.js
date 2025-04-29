@@ -36,6 +36,7 @@ const Cursa = sequelizeOLTP.define("Cursa",
     {
         freezeTableName: true,
         tableName: "CURSA",
+        timestamps: false,
     }
 );
   

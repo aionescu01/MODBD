@@ -14,6 +14,7 @@ const Discount = sequelizeOLTP.define("Discount",
   {
       freezeTableName: true,
       tableName: "DISCOUNT",
+      timestamps: false,
   }
 );
 

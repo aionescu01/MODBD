@@ -27,7 +27,7 @@ import {
   Delete as DeleteIcon
 } from '@mui/icons-material';
 
-const EmployeeManagement = () => {
+const AngajatManagement = () => {
   const [employees, setEmployees] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -343,4 +343,4 @@ const EmployeeManagement = () => {
   );
 };
 
-export default EmployeeManagement;
+export default AngajatManagement;

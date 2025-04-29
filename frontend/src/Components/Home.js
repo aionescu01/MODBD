@@ -11,11 +11,33 @@ const Home = () => {
     { name: "Clienti", path: "/client" },
     { name: "Curse", path: "/cursa" },
     { name: "Detalii curse", path: "/getcursa"},
+    { name: "Discount", path: "/discount"},
     { name: "Facturi", path: "/factura" },
     { name: "Locatii", path: "/locatii" },
     { name: "Masini", path: "/masina" },
-    { name: "Soferi", path: "/istoricsoferi" },
-    { name: "Lucreaza", path: "/lucreaza"}
+    { name: "Istoric soferi", path: "/istoricsoferi" },
+    { name: "Lucreaza in", path: "/lucreaza"}
+  ];
+
+  const tablesNORD = [
+    { name: "Angajati Nord", path: "/angajatNord" },
+    { name: "Curse Nord", path: "/cursaNord" },
+    { name: "Detalii curse Nord", path: "/getcursaNord"},
+    { name: "Locatii Nord", path: "/locatiiNord" }
+  ];
+
+  const tablesSUD = [
+    { name: "Angajati Sud", path: "/angajatSud" },
+    { name: "Curse Sud", path: "/cursaSud" },
+    { name: "Detalii curse Sud", path: "/getcursaSud"},
+    { name: "Locatii Sud", path: "/locatiiSud" }
+  ];
+
+  const tablesCENTRAL = [
+    { name: "Angajati Central", path: "/angajatCentral" },
+    { name: "Curse Central", path: "/cursaCentral" },
+    { name: "Detalii curse Central", path: "/getcursaCentral"},
+    { name: "Locatii Central", path: "/locatiiCentral" }
   ];
 
   const images = [
@@ -63,6 +85,39 @@ const Home = () => {
         {/* Carduri OLTP*/}
         <div className="card-container">
           {tablesOLTP.map((table) => (
+            <div key={table.name} className="card">
+              <h2>{table.name}</h2>
+              <NavLink to={table.path} className="button">Vezi detalii</NavLink>
+            </div>
+          ))}
+        </div>
+
+        <br/>
+
+        <div className="card-subcontainer">
+          {tablesNORD.map((table) => (
+            <div key={table.name} className="card">
+              <h2>{table.name}</h2>
+              <NavLink to={table.path} className="button">Vezi detalii</NavLink>
+            </div>
+          ))}
+        </div>
+
+        <br/>
+
+        <div className="card-subcontainer">
+          {tablesSUD.map((table) => (
+            <div key={table.name} className="card">
+              <h2>{table.name}</h2>
+              <NavLink to={table.path} className="button">Vezi detalii</NavLink>
+            </div>
+          ))}
+        </div>
+
+        <br/>
+
+        <div className="card-subcontainer">
+          {tablesCENTRAL.map((table) => (
             <div key={table.name} className="card">
               <h2>{table.name}</h2>
               <NavLink to={table.path} className="button">Vezi detalii</NavLink>

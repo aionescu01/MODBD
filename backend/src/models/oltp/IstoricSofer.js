@@ -19,6 +19,7 @@ const IstoricSofer = sequelizeOLTP.define("IstoricSofer",
   {
       freezeTableName: true,
       tableName: "ISTORIC_SOFER",
+      timestamps: false,
   }
 );
 

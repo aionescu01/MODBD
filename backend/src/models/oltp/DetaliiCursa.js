@@ -23,6 +23,7 @@ const DetaliiCursa = sequelizeOLTP.define("DetaliiCursa",
   {
       freezeTableName: true,
       tableName: "DETALII_CURSA",
+      timestamps: false,
   }
 );
 

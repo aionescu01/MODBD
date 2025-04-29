@@ -24,6 +24,7 @@ const Factura = sequelizeOLTP.define("Factura",
   {
       freezeTableName: true,
       tableName: "FACTURA",
+      timestamps: false,
   }
 );
 

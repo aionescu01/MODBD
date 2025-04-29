@@ -15,6 +15,7 @@ const LucreazaIn = sequelizeOLTP.define("LucreazaIn",
   {
       freezeTableName: true,
       tableName: "LUCREAZA_IN",
+      timestamps: false,
   }
 );
 

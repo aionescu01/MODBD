@@ -9,7 +9,7 @@ const Locatii = sequelizeOLTP.define("Locatii",
             autoIncrement: true,
         },
         localitate: {
-            type: DataTypes.STRING(20),
+            type: DataTypes.STRING(30),
             allowNull: false,
         },
         judet: {
@@ -20,6 +20,7 @@ const Locatii = sequelizeOLTP.define("Locatii",
     {
         freezeTableName: true,
         tableName: "LOCATII",
+        timestamps: false,
     }
 );
 

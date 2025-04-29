@@ -4,6 +4,8 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 
+const { Op } = require('sequelize');
+
 const angajatRoutes = require("./routes/oltp/angajat");
 const clientRoutes = require("./routes/oltp/client");
 const cursaRoutes = require("./routes/oltp/cursa");
@@ -16,7 +18,22 @@ const lucreazaInRoutes = require("./routes/oltp/lucreazaIn");
 const masinaRoutes = require("./routes/oltp/masina");
 const mesajRoutes = require("./routes/oltp/mesaj");
 
-const { sequelizeOLTP } = require("./config/database");
+const angajatNordRoutes = require("./routes/nord/angajatNord");
+const cursaNordRoutes = require("./routes/nord/cursaNord");
+const detaliiCursaNordRoutes = require("./routes/nord/detaliiCursaNord");
+const locatiiNordRoutes = require("./routes/nord/locatiiNord");
+
+const angajatSudRoutes = require("./routes/sud/angajatSud");
+const cursaSudRoutes = require("./routes/sud/cursaSud");
+const detaliiCursaSudRoutes = require("./routes/sud/detaliiCursaSud");
+const locatiiSudRoutes = require("./routes/sud/locatiiSud");
+
+const angajatCentralRoutes = require("./routes/central/angajatCentral");
+const cursaCentralRoutes = require("./routes/central/cursaCentral");
+const detaliiCursaCentralRoutes = require("./routes/central/detaliiCursaCentral");
+const locatiiCentralRoutes = require("./routes/central/locatiiCentral");
+
+const { sequelizeOLTP, sequelizeNORD, sequelizeSUD, sequelizeCENTRAL } = require("./config/database");
 
 require("./models/oltp/associations");
 
@@ -43,6 +60,20 @@ app.use("/api/oltp/lucreazaIn", lucreazaInRoutes);
 app.use("/api/oltp/masina", masinaRoutes);
 app.use("/api/oltp/mesaj", mesajRoutes);
 
+app.use("/api/nord/angajatNord", angajatNordRoutes);
+app.use("/api/nord/cursaNord", cursaNordRoutes);
+app.use("/api/nord/detaliiCursaNord", detaliiCursaNordRoutes);
+app.use("/api/nord/locatiiNord", locatiiNordRoutes);
+
+app.use("/api/sud/angajatSud", angajatSudRoutes);
+app.use("/api/sud/cursaSud", cursaSudRoutes);
+app.use("/api/sud/detaliiCursaSud", detaliiCursaSudRoutes);
+app.use("/api/sud/locatiiSud", locatiiSudRoutes);
+
+app.use("/api/central/angajatCentral", angajatCentralRoutes);
+app.use("/api/central/cursaCentral", cursaCentralRoutes);
+app.use("/api/central/detaliiCursaCentral", detaliiCursaCentralRoutes);
+app.use("/api/central/locatiiCentral", locatiiCentralRoutes);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
@@ -89,10 +120,26 @@ async function syncDatabases() {
     await addMessageToDatabase("Baza de date OLTP sincronizata cu succes!", "I", "Admin");
 
     await runSQLScript(sequelizeOLTP, './scripts/oltp-add-users.sql', 'adaugare utilizatori in OLTP');
+
+    await insertInitialDataOLTP();
+
     await runSQLScript(sequelizeOLTP, './scripts/oltp-add-constraints.sql', 'adaugare constrangeri tabele OLTP');
     await runSQLScript(sequelizeOLTP, './scripts/oltp-grant-permissions-tables-users.sql', 'adaugare permisiuni tabele OLTP');
 
-    await insertInitialDataOLTP();
+    await sequelizeNORD.sync({ force: true });
+    await addMessageToDatabase("Baza de date NORD sincronizata cu succes!", "I", "Admin");
+
+    await insertInitialDataNORD();
+
+    await sequelizeSUD.sync({ force: true });
+    await addMessageToDatabase("Baza de date SUD sincronizata cu succes!", "I", "Admin");
+
+    await insertInitialDataSUD();
+
+    await sequelizeCENTRAL.sync({ force: true });
+    await addMessageToDatabase("Baza de date CENTRAL sincronizata cu succes!", "I", "Admin");
+
+    await insertInitialDataCENTRAL();
 
     app.listen(PORT, () =>
       console.log(`DB ruleaza pe portul ${PORT}`)
@@ -141,17 +188,51 @@ async function insertInitialDataOLTP() {
     if (existingLocatii.length === 0) {
 
       await sequelizeOLTP.models.Locatii.bulkCreate([
-        { localitate: 'Bucuresti', judet: 'Bucuresti' },
+        { localitate: 'București', judet: 'București' },
         { localitate: 'Cluj-Napoca', judet: 'Cluj' },
-        { localitate: 'Iasi', judet: 'Iasi' },
         { localitate: 'Timișoara', judet: 'Timiș' },
         { localitate: 'Constanța', judet: 'Constanța' },
         { localitate: 'Brașov', judet: 'Brașov' },
         { localitate: 'Ploiești', judet: 'Prahova' },
         { localitate: 'Arad', judet: 'Arad' },
         { localitate: 'Iași', judet: 'Iași' },
-        { localitate: 'Sibiu', judet: 'Sibiu' }
-      ]);
+        { localitate: 'Sibiu', judet: 'Sibiu' },
+        { localitate: 'Craiova', judet: 'Dolj' },
+        { localitate: 'Oradea', judet: 'Bihor' },
+        { localitate: 'Voluntari', judet: 'Ilfov' },
+        { localitate: 'Arad', judet: 'Arad' },
+        { localitate: 'Alba Iulia', judet: 'Alba' },
+        { localitate: 'Alexandria', judet: 'Teleorman' },
+        { localitate: 'Bacău', judet: 'Bacău' },
+        { localitate: 'Baia Mare', judet: 'Maramureș' },
+        { localitate: 'Bârlad', judet: 'Vaslui' },
+        { localitate: 'Bistrița', judet: 'Bistrița-Năsăud' },
+        { localitate: 'Botoșani', judet: 'Botoșani' },
+        { localitate: 'Brăila', judet: 'Brăila' },
+        { localitate: 'Buzău', judet: 'Buzău' },
+        { localitate: 'Călărași', judet: 'Călărași' },
+        { localitate: 'Deva', judet: 'Hunedoara' },
+        { localitate: 'Drobeta-Turnu Severin', judet: 'Mehedinți' },
+        { localitate: 'Focșani', judet: 'Vrancea' },
+        { localitate: 'Galați', judet: 'Galați' },
+        { localitate: 'Giurgiu', judet: 'Giurgiu' },
+        { localitate: 'Miercurea Ciuc', judet: 'Harghita' },
+        { localitate: 'Piatra Neamț', judet: 'Neamț' },
+        { localitate: 'Pitești', judet: 'Argeș' },
+        { localitate: 'Râmnicu Vâlcea', judet: 'Vâlcea' },
+        { localitate: 'Reșița', judet: 'Caraș-Severin' },
+        { localitate: 'Satu Mare', judet: 'Satu Mare' },
+        { localitate: 'Sfântu Gheorghe', judet: 'Covasna' },
+        { localitate: 'Slatina', judet: 'Olt' },
+        { localitate: 'Slobozia', judet: 'Ialomița' },
+        { localitate: 'Suceava', judet: 'Suceava' },
+        { localitate: 'Târgoviște', judet: 'Dâmbovița' },
+        { localitate: 'Târgu Jiu', judet: 'Gorj' },
+        { localitate: 'Târgu Mureș', judet: 'Mureș' },
+        { localitate: 'Tulcea', judet: 'Tulcea' },
+        { localitate: 'Vaslui', judet: 'Vaslui' },
+        { localitate: 'Zalău', judet: 'Sălaj' }
+      ]);      
 
     }
 
@@ -217,18 +298,18 @@ async function insertInitialDataOLTP() {
         { cod_angajat: 5, cod_locatie: 2 },
         { cod_angajat: 7, cod_locatie: 2 },
         { cod_angajat: 10, cod_locatie: 2 },
-        { cod_angajat: 1, cod_locatie: 3 },
         { cod_angajat: 2, cod_locatie: 3 },
         { cod_angajat: 8, cod_locatie: 3 },
+        { cod_angajat: 1, cod_locatie: 4 },
         { cod_angajat: 2, cod_locatie: 4 },
-        { cod_angajat: 8, cod_locatie: 4 },
         { cod_angajat: 1, cod_locatie: 5 },
-        { cod_angajat: 2, cod_locatie: 5 },
-        { cod_angajat: 1, cod_locatie: 6 },
-        { cod_angajat: 2, cod_locatie: 7 },
-        { cod_angajat: 3, cod_locatie: 8 },
-        { cod_angajat: 5, cod_locatie: 9 },
-        { cod_angajat: 7, cod_locatie: 10 }
+        { cod_angajat: 2, cod_locatie: 6 },
+        { cod_angajat: 3, cod_locatie: 7 },
+        { cod_angajat: 1, cod_locatie: 8 },
+        { cod_angajat: 2, cod_locatie: 8 },
+        { cod_angajat: 5, cod_locatie: 8 },
+        { cod_angajat: 8, cod_locatie: 8 },
+        { cod_angajat: 7, cod_locatie: 9 }
       ]);
 
     }
@@ -244,25 +325,25 @@ async function insertInitialDataOLTP() {
         { cod_masina: 4, cod_sofer: 5, cod_client: 4, adresa_client: 'Strada Teiului 6', destinatie: 'Strada Muresului 8', cod_locatie: 2 },
         { cod_masina: 5, cod_sofer: 7, cod_client: 5, adresa_client: 'Strada Moara de Vant 3', destinatie: 'Strada Alba Iulia 2', cod_locatie: 2 },
         { cod_masina: 6, cod_sofer: 8, cod_client: 6, adresa_client: 'Strada Nordului 1', destinatie: 'Strada Unirii 15', cod_locatie: 2 },
-        { cod_masina: 7, cod_sofer: 1, cod_client: 7, adresa_client: 'Strada Stelea 11', destinatie: 'Strada Gheorgheni 4', cod_locatie: 3 },
-        { cod_masina: 8, cod_sofer: 2, cod_client: 8, adresa_client: 'Strada Căpitanilor 7', destinatie: 'Strada Mureșului 13', cod_locatie: 3 },
-        { cod_masina: 9, cod_sofer: 3, cod_client: 9, adresa_client: 'Strada Valea Lunga 8', destinatie: 'Strada Moșilor 10', cod_locatie: 3 },
-        { cod_masina: 10, cod_sofer: 5, cod_client: 10, adresa_client: 'Strada Făgetului 9', destinatie: 'Strada Ferdinand 6', cod_locatie: 4 },
-        { cod_masina: 12, cod_sofer: 7, cod_client: 11, adresa_client: 'Strada Carpați 5', destinatie: 'Strada Iancu de Hunedoara 7', cod_locatie: 4 },
-        { cod_masina: 11, cod_sofer: 8, cod_client: 12, adresa_client: 'Strada Gheorgheni 10', destinatie: 'Strada Piatra Mare 3', cod_locatie: 4 },
-        { cod_masina: 1, cod_sofer: 1, cod_client: 13, adresa_client: 'Strada Păcii 4', destinatie: 'Strada Andrei Mureșanu 2', cod_locatie: 5 },
-        { cod_masina: 1, cod_sofer: 2, cod_client: 14, adresa_client: 'Strada Dacia 5', destinatie: 'Strada Ion Ionescu 7', cod_locatie: 5 },
-        { cod_masina: 2, cod_sofer: 3, cod_client: 15, adresa_client: 'Strada Abatorului 8', destinatie: 'Strada Garajului 12', cod_locatie: 5 },
-        { cod_masina: 2, cod_sofer: 5, cod_client: 16, adresa_client: 'Strada Pădurii 9', destinatie: 'Strada Revoluției 13, Hunedoara', cod_locatie: 6 },
-        { cod_masina: 3, cod_sofer: 7, cod_client: 17, adresa_client: 'Strada Viitorului 12', destinatie: 'Strada Dumitru Ciuca 5', cod_locatie: 6 },
-        { cod_masina: 7, cod_sofer: 8, cod_client: 18, adresa_client: 'Strada Adunați 15', destinatie: 'Strada Petru Rareș 6', cod_locatie: 6 },
-        { cod_masina: 8, cod_sofer: 1, cod_client: 19, adresa_client: 'Strada Mărului 3', destinatie: 'Strada Gheorghe Doja 10', cod_locatie: 7 },
-        { cod_masina: 11, cod_sofer: 2, cod_client: 1, adresa_client: 'Strada Arcului 8', destinatie: 'Strada Lăcrămioarei 12', cod_locatie: 7 },
-        { cod_masina: 11, cod_sofer: 3, cod_client: 2, adresa_client: 'Strada Călărașilor 1', destinatie: 'Strada Gării 4', cod_locatie: 7 },
-        { cod_masina: 12, cod_sofer: 5, cod_client: 5, adresa_client: 'Strada Perlei 10', destinatie: 'Strada Brătianu 6', cod_locatie: 8 },
-        { cod_masina: 1, cod_sofer: 7, cod_client: 1, adresa_client: 'Strada Sălciilor 3', destinatie: 'Strada Alexandru Ioan Cuza 7', cod_locatie: 8 },
-        { cod_masina: 7, cod_sofer: 8, cod_client: 2, adresa_client: 'Strada Albinelor 8', destinatie: 'Strada Căpitan Ignat 3', cod_locatie: 8 },
-        { cod_masina: 8, cod_sofer: 1, cod_client: 1, adresa_client: 'Strada Găgești 4', destinatie: 'Strada Filimon 12', cod_locatie: 9 }
+        { cod_masina: 10, cod_sofer: 5, cod_client: 10, adresa_client: 'Strada Făgetului 9', destinatie: 'Strada Ferdinand 6', cod_locatie: 3 },
+        { cod_masina: 12, cod_sofer: 7, cod_client: 11, adresa_client: 'Strada Carpați 5', destinatie: 'Strada Iancu de Hunedoara 7', cod_locatie: 3 },
+        { cod_masina: 11, cod_sofer: 8, cod_client: 12, adresa_client: 'Strada Gheorgheni 10', destinatie: 'Strada Piatra Mare 3', cod_locatie: 3 },
+        { cod_masina: 1, cod_sofer: 1, cod_client: 13, adresa_client: 'Strada Păcii 4', destinatie: 'Strada Andrei Mureșanu 2', cod_locatie: 4 },
+        { cod_masina: 1, cod_sofer: 2, cod_client: 14, adresa_client: 'Strada Dacia 5', destinatie: 'Strada Ion Ionescu 7', cod_locatie: 4 },
+        { cod_masina: 2, cod_sofer: 3, cod_client: 15, adresa_client: 'Strada Abatorului 8', destinatie: 'Strada Garajului 12', cod_locatie: 4 },
+        { cod_masina: 2, cod_sofer: 5, cod_client: 16, adresa_client: 'Strada Pădurii 9', destinatie: 'Strada Revoluției 13, Hunedoara', cod_locatie: 5 },
+        { cod_masina: 3, cod_sofer: 7, cod_client: 17, adresa_client: 'Strada Viitorului 12', destinatie: 'Strada Dumitru Ciuca 5', cod_locatie: 5 },
+        { cod_masina: 7, cod_sofer: 8, cod_client: 18, adresa_client: 'Strada Adunați 15', destinatie: 'Strada Petru Rareș 6', cod_locatie: 5 },
+        { cod_masina: 8, cod_sofer: 1, cod_client: 19, adresa_client: 'Strada Mărului 3', destinatie: 'Strada Gheorghe Doja 10', cod_locatie: 6 },
+        { cod_masina: 11, cod_sofer: 2, cod_client: 1, adresa_client: 'Strada Arcului 8', destinatie: 'Strada Lăcrămioarei 12', cod_locatie: 6 },
+        { cod_masina: 11, cod_sofer: 3, cod_client: 2, adresa_client: 'Strada Călărașilor 1', destinatie: 'Strada Gării 4', cod_locatie: 6 },
+        { cod_masina: 12, cod_sofer: 5, cod_client: 5, adresa_client: 'Strada Perlei 10', destinatie: 'Strada Brătianu 6', cod_locatie: 7 },
+        { cod_masina: 1, cod_sofer: 7, cod_client: 1, adresa_client: 'Strada Sălciilor 3', destinatie: 'Strada Alexandru Ioan Cuza 7', cod_locatie: 7 },
+        { cod_masina: 7, cod_sofer: 8, cod_client: 2, adresa_client: 'Strada Albinelor 8', destinatie: 'Strada Căpitan Ignat 3', cod_locatie: 7 },
+        { cod_masina: 7, cod_sofer: 1, cod_client: 7, adresa_client: 'Strada Stelea 11', destinatie: 'Strada Gheorgheni 4', cod_locatie: 8 },
+        { cod_masina: 8, cod_sofer: 1, cod_client: 1, adresa_client: 'Strada Găgești 4', destinatie: 'Strada Filimon 12', cod_locatie: 8 },
+        { cod_masina: 8, cod_sofer: 2, cod_client: 8, adresa_client: 'Strada Căpitanilor 7', destinatie: 'Strada Mureșului 13', cod_locatie: 8 },
+        { cod_masina: 9, cod_sofer: 3, cod_client: 9, adresa_client: 'Strada Valea Lunga 8', destinatie: 'Strada Moșilor 10', cod_locatie: 8 }
       ]);
 
     }
@@ -372,10 +453,258 @@ async function insertInitialDataOLTP() {
 
     await sequelizeOLTP.query('COMMIT;');
 
-    if (existingAngajati.length > 0 || existingClients.length > 0 || existingCurse.length > 0 || existingDetaliiCurse.length > 0 || existingDiscounts.length > 0 || existingFacturi.length > 0 || existingIstoricSoferi.length > 0 || existingLocatii.length > 0 || existingLucreazaIn.length > 0 || existingMasini.length > 0){
+    if (existingAngajati.length == 0 || existingClients.length == 0 || existingCurse.length == 0 || existingDetaliiCurse.length == 0 || existingDiscounts.length == 0 || existingFacturi.length == 0 || existingIstoricSoferi.length == 0 || existingLocatii.length == 0 || existingLucreazaIn.length == 0 || existingMasini.length == 0){
       await addMessageToDatabase("Datele initiale au fost inserate cu succes in baza de date de tip OLTP!", "I", "Admin");
     }
   } catch (err) {
     await addMessageToDatabase("Eroare la inserarea datelor initiale pentru OLTP", "E", "Admin");
+  }
+}
+
+async function insertInitialDataNORD() {
+  try {
+
+    const existingLocatiiNord = await sequelizeNORD.models.LocatiiNord.findAll();
+
+    if (existingLocatiiNord.length === 0) {
+
+      const locatii = await sequelizeOLTP.models.Locatii.findAll({
+        where: {
+            judet: ["Botoșani", "Suceava", "Bistrița-Năsăud", "Satu Mare", "Maramureș", "Iași", "Neamț", "Bihor", "Sălaj"],
+        },
+        raw: true,
+      });
+
+      await sequelizeNORD.models.LocatiiNord.bulkCreate(locatii);
+
+    }
+
+    const existingAngajatiNord = await sequelizeNORD.models.AngajatNord.findAll();
+
+    if (existingAngajatiNord.length === 0) {
+
+      const angajati = await sequelizeOLTP.models.Angajat.findAll({
+        include: [{
+            model: sequelizeOLTP.models.Locatii,
+            required: true,
+            through: { attributes: [] },
+            where: {
+                judet: ["Botoșani", "Suceava", "Bistrița-Năsăud", "Satu Mare", "Maramureș", "Iași", "Neamț", "Bihor", "Sălaj"],
+            }
+        }],
+        raw: true,
+      });
+    
+      await sequelizeNORD.models.AngajatNord.bulkCreate(angajati);
+
+    }
+
+    const existingCurseNord = await sequelizeNORD.models.CursaNord.findAll();
+
+    if (existingCurseNord.length === 0) {
+      const curse = await sequelizeOLTP.models.Cursa.findAll({ raw: true });
+
+      const locatiiNord = await sequelizeNORD.models.LocatiiNord.findAll({ attributes: ['cod_locatie'], raw: true });
+      const coduriLocatiiNord = locatiiNord.map(loc => loc.cod_locatie);
+
+      const curseFiltrate = curse.filter(cursa => coduriLocatiiNord.includes(cursa.cod_locatie));
+
+      await sequelizeNORD.models.CursaNord.bulkCreate(curseFiltrate);
+    }
+
+    const existingDetaliiCurseNord = await sequelizeNORD.models.DetaliiCursaNord.findAll();
+
+    if (existingDetaliiCurseNord.length === 0) {
+      const detaliiCurse = await sequelizeOLTP.models.DetaliiCursa.findAll({ raw: true });
+
+      const curseNord = await sequelizeNORD.models.CursaNord.findAll({ attributes: ['cod_cursa'], raw: true });
+      const coduriCurseNord = curseNord.map(cursa => cursa.cod_cursa);
+
+      const detaliiFiltrate = detaliiCurse.filter(detaliu => coduriCurseNord.includes(detaliu.cod_cursa));
+
+      await sequelizeNORD.models.DetaliiCursaNord.bulkCreate(detaliiFiltrate);
+    }
+
+    await sequelizeNORD.query('COMMIT;');
+
+    if (existingAngajatiNord.length == 0 || existingCurseNord.length == 0 || existingLocatiiNord.length == 0 || existingDetaliiCurseNord == 0){
+      await addMessageToDatabase("Datele initiale au fost inserate cu succes in baza de date NORD!", "I", "Admin");
+    }
+  } catch (err) {
+    console.log(err);
+
+    await addMessageToDatabase("Eroare la inserarea datelor initiale pentru NORD", "E", "Admin");
+  }
+}
+
+async function insertInitialDataSUD() {
+  try {
+
+    const existingLocatiiSud = await sequelizeSUD.models.LocatiiSud.findAll();
+
+    if (existingLocatiiSud.length === 0) {
+
+      const locatii = await sequelizeOLTP.models.Locatii.findAll({
+        where: {
+            judet: ["București", "Ilfov", "Dâmbovița", "Prahova", "Argeș", "Giurgiu", "Teleorman", "Ialomița", "Călărași", "Brăila", "Vrancea", "Dolj", "Olt", "Mehedinți", "Gorj", "Vâlcea", "Caraș-Severin", "Constanța", "Tulcea"],
+        },
+        raw: true,
+      });
+
+      await sequelizeSUD.models.LocatiiSud.bulkCreate(locatii);
+
+    }
+
+    const existingAngajatiSud = await sequelizeSUD.models.AngajatSud.findAll();
+
+    if (existingAngajatiSud.length === 0) {
+
+      const angajatiRaw = await sequelizeOLTP.models.Angajat.findAll({
+        include: [{
+            model: sequelizeOLTP.models.Locatii,
+            required: true,
+            through: { attributes: [] },
+            where: {
+                judet: [
+                    "București", "Ilfov", "Dâmbovița", "Prahova", "Argeș", "Giurgiu", 
+                    "Teleorman", "Ialomița", "Călărași", "Brăila", "Vrancea", "Dolj", 
+                    "Olt", "Mehedinți", "Gorj", "Vâlcea", "Caraș-Severin", "Constanța", "Tulcea"
+                ],
+            }
+        }]
+      });
+      
+      const angajati = angajatiRaw.map(a => a.toJSON());
+      
+      await sequelizeSUD.models.AngajatSud.bulkCreate(angajati);
+
+    }
+
+    const existingCurseSud = await sequelizeSUD.models.CursaSud.findAll();
+
+    if (existingCurseSud.length === 0) {
+      const curse = await sequelizeOLTP.models.Cursa.findAll({ raw: true });
+
+      const locatiiSud = await sequelizeSUD.models.LocatiiSud.findAll({ attributes: ['cod_locatie'], raw: true });
+      const coduriLocatiiSud = locatiiSud.map(loc => loc.cod_locatie);
+
+      const curseFiltrate = curse.filter(cursa => coduriLocatiiSud.includes(cursa.cod_locatie));
+
+      await sequelizeSUD.models.CursaSud.bulkCreate(curseFiltrate);
+    }
+
+    const existingDetaliiCurseSud = await sequelizeSUD.models.DetaliiCursaSud.findAll();
+
+    if (existingDetaliiCurseSud.length === 0) {
+      const detaliiCurse = await sequelizeOLTP.models.DetaliiCursa.findAll({ raw: true });
+
+      const curseSud = await sequelizeSUD.models.CursaSud.findAll({ attributes: ['cod_cursa'], raw: true });
+      const coduriCurseSud = curseSud.map(cursa => cursa.cod_cursa);
+
+      const detaliiFiltrate = detaliiCurse.filter(detaliu => coduriCurseSud.includes(detaliu.cod_cursa));
+
+      await sequelizeSUD.models.DetaliiCursaSud.bulkCreate(detaliiFiltrate);
+    }
+
+    await sequelizeSUD.query('COMMIT;');
+
+    if (existingAngajatiSud.length == 0 || existingCurseSud.length == 0 || existingLocatiiSud.length == 0 || existingDetaliiCurseSud == 0){
+      await addMessageToDatabase("Datele initiale au fost inserate cu succes in baza de date SUD!", "I", "Admin");
+    }
+  } catch (err) {
+    console.log(err);
+
+    await addMessageToDatabase("Eroare la inserarea datelor initiale pentru SUD", "E", "Admin");
+  }
+}
+
+async function insertInitialDataCENTRAL() {
+  try {
+
+    const existingLocatiiCentral = await sequelizeCENTRAL.models.LocatiiCentral.findAll();
+
+    if (existingLocatiiCentral.length === 0) {
+
+      const locatii = await sequelizeOLTP.models.Locatii.findAll({
+        where: {
+          judet: {
+            [Op.notIn]: [
+              "Botoșani", "Suceava", "Bistrița-Năsăud", "Satu Mare", "Maramureș", "Iași",
+              "Neamț", "Bihor", "Sălaj", "București", "Ilfov", "Dâmbovița", "Prahova", "Argeș",
+              "Giurgiu", "Teleorman", "Ialomița", "Călărași", "Brăila", "Vrancea", "Dolj", 
+              "Olt", "Mehedinți", "Gorj", "Vâlcea", "Caraș-Severin", "Constanța", "Tulcea"
+            ]
+          }
+        },
+        raw: true,
+      });
+
+      await sequelizeCENTRAL.models.LocatiiCentral.bulkCreate(locatii);
+
+    }
+
+    const existingAngajatiCentral = await sequelizeCENTRAL.models.AngajatCentral.findAll();
+
+    if (existingAngajatiCentral.length === 0) {
+
+      const angajatiRaw = await sequelizeOLTP.models.Angajat.findAll({
+        include: [{
+            model: sequelizeOLTP.models.Locatii,
+            required: true,
+            through: { attributes: [] },
+            where: {
+                judet: {
+                    [Op.notIn]: [
+                        "Botoșani", "Suceava", "Bistrița-Năsăud", "Satu Mare", "Maramureș", "Iași",
+                        "Neamț", "Bihor", "Sălaj", "București", "Ilfov", "Dâmbovița", "Prahova", 
+                        "Argeș", "Giurgiu", "Teleorman", "Ialomița", "Călărași", "Brăila", "Vrancea", 
+                        "Dolj", "Olt", "Mehedinți", "Gorj", "Vâlcea", "Caraș-Severin", "Constanța", "Tulcea"
+                    ]
+                }
+            }
+        }]
+      });
+      
+      const angajati = angajatiRaw.map(a => a.toJSON());
+      
+      await sequelizeCENTRAL.models.AngajatCentral.bulkCreate(angajati);    
+
+    }
+
+    const existingCurseCentral = await sequelizeCENTRAL.models.CursaCentral.findAll();
+
+    if (existingCurseCentral.length === 0) {
+      const curse = await sequelizeOLTP.models.Cursa.findAll({ raw: true });
+
+      const locatiiCentral = await sequelizeCENTRAL.models.LocatiiCentral.findAll({ attributes: ['cod_locatie'], raw: true });
+      const coduriLocatiiCentral = locatiiCentral.map(loc => loc.cod_locatie);
+
+      const curseFiltrate = curse.filter(cursa => coduriLocatiiCentral.includes(cursa.cod_locatie));
+
+      await sequelizeCENTRAL.models.CursaCentral.bulkCreate(curseFiltrate);
+    }
+
+    const existingDetaliiCurseCentral = await sequelizeCENTRAL.models.DetaliiCursaCentral.findAll();
+
+    if (existingDetaliiCurseCentral.length === 0) {
+      const detaliiCurse = await sequelizeOLTP.models.DetaliiCursa.findAll({ raw: true });
+
+      const curseCentral = await sequelizeCENTRAL.models.CursaCentral.findAll({ attributes: ['cod_cursa'], raw: true });
+      const coduriCurseCentral = curseCentral.map(cursa => cursa.cod_cursa);
+
+      const detaliiFiltrate = detaliiCurse.filter(detaliu => coduriCurseCentral.includes(detaliu.cod_cursa));
+
+      await sequelizeCENTRAL.models.DetaliiCursaCentral.bulkCreate(detaliiFiltrate);
+    }
+
+    await sequelizeCENTRAL.query('COMMIT;');
+
+    if (existingAngajatiCentral.length == 0 || existingCurseCentral.length == 0 || existingLocatiiCentral.length == 0 || existingDetaliiCurseCentral == 0){
+      await addMessageToDatabase("Datele initiale au fost inserate cu succes in baza de date CENTRAL!", "I", "Admin");
+    }
+  } catch (err) {
+    console.log(err);
+
+    await addMessageToDatabase("Eroare la inserarea datelor initiale pentru CENTRAL", "E", "Admin");
   }
 }

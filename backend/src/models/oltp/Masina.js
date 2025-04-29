@@ -31,6 +31,7 @@ const Masina = sequelizeOLTP.define("Masina",
     {
         freezeTableName: true,
         tableName: "MASINA",
+        timestamps: false,
     }
 );
 
