@@ -110,8 +110,8 @@ const AngajatHRManagement = () => {
   };
 
   return (
-    <div>
-    <Header/>
+    <div className="parent">
+      <Header/>
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
       <Paper sx={{ p: 2 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -205,7 +205,7 @@ const AngajatHRManagement = () => {
                 label="Data Nașterii"
                 name="data_nastere"
                 type="date"
-                value={formData.data_nastere}
+                value={formData.data_nastere ? formData.data_nastere.split('T')[0] : ''}
                 onChange={handleInputChange}
                 InputLabelProps={{ shrink: true }}
                 fullWidth
@@ -214,7 +214,7 @@ const AngajatHRManagement = () => {
                 label="Data Angajării"
                 name="data_angajare"
                 type="date"
-                value={formData.data_angajare}
+                value={formData.data_angajare ? formData.data_angajare.split('T')[0] : ''}
                 onChange={handleInputChange}
                 InputLabelProps={{ shrink: true }}
                 fullWidth

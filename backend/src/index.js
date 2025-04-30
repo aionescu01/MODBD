@@ -291,16 +291,16 @@ async function insertInitialDataOLTP() {
     if (existingAngajati.length === 0) {
 
       await sequelizeOLTP.models.Angajat.bulkCreate([
-        { nume: 'Popescu', prenume: 'Ion', nr_telefon: '0720123456', tip_angajat: 'Sofer', data_nastere: '1985-03-15', data_angajare: '2020-01-10', salariu: 3500, cod_masina: 2, dispecerat: null },
-        { nume: 'Ionescu', prenume: 'Maria', nr_telefon: '0745123456', tip_angajat: 'Sofer', data_nastere: '1990-06-25', data_angajare: '2021-03-15', salariu: 3000, cod_masina: 3, dispecerat: null },
-        { nume: 'Vasilescu', prenume: 'George', nr_telefon: '0734123456', tip_angajat: 'Sofer', data_nastere: '1982-11-05', data_angajare: '2019-05-22', salariu: 3800, cod_masina: 1, dispecerat: null },
-        { nume: 'Georgescu', prenume: 'Ana', nr_telefon: '0765123456', tip_angajat: 'Dispecer', data_nastere: '1987-02-15', data_angajare: '2018-09-01', salariu: 4200, cod_masina: null, dispecerat: 'Titan' },
-        { nume: 'Mihail', prenume: 'Adrian', nr_telefon: '0785123456', tip_angajat: 'Sofer', data_nastere: '1989-08-10', data_angajare: '2020-07-01', salariu: 3400, cod_masina: 7, dispecerat: null },
-        { nume: 'Stan', prenume: 'Florin', nr_telefon: '0756123456', tip_angajat: 'Dispecer', data_nastere: '1983-12-20', data_angajare: '2017-04-10', salariu: 4300, cod_masina: null, dispecerat: 'Dristor' },
-        { nume: 'Radu', prenume: 'Elena', nr_telefon: '0723123456', tip_angajat: 'Sofer', data_nastere: '1995-01-12', data_angajare: '2022-06-20', salariu: 3100, cod_masina: 8, dispecerat: null },
-        { nume: 'Bucur', prenume: 'Marian', nr_telefon: '0741123456', tip_angajat: 'Sofer', data_nastere: '1992-07-30', data_angajare: '2021-05-12', salariu: 3200, cod_masina: 11, dispecerat: null },
-        { nume: 'Popa', prenume: 'Vlad', nr_telefon: '0729123456', tip_angajat: 'Dispecer', data_nastere: '1986-04-28', data_angajare: '2019-11-15', salariu: 4000, cod_masina: null, dispecerat: 'Titan' },
-        { nume: 'Dima', prenume: 'Ioana', nr_telefon: '0798123456', tip_angajat: 'Sofer', data_nastere: '1980-09-22', data_angajare: '2018-02-05', salariu: 3600, cod_masina: 12, dispecerat: null }
+        { nume: 'Popescu', prenume: 'Ion', nr_telefon: '0720123456', tip_angajat: 'Sofer', data_nastere: '1985-03-15', data_angajare: '2020-01-10', salariu: 3500, cod_masina: 2 },
+        { nume: 'Ionescu', prenume: 'Maria', nr_telefon: '0745123456', tip_angajat: 'Sofer', data_nastere: '1990-06-25', data_angajare: '2021-03-15', salariu: 3000, cod_masina: 3 },
+        { nume: 'Vasilescu', prenume: 'George', nr_telefon: '0734123456', tip_angajat: 'Sofer', data_nastere: '1982-11-05', data_angajare: '2019-05-22', salariu: 3800, cod_masina: 1 },
+        { nume: 'Georgescu', prenume: 'Ana', nr_telefon: '0765123456', tip_angajat: 'Dispecer', data_nastere: '1987-02-15', data_angajare: '2018-09-01', salariu: 4200, cod_masina: null },
+        { nume: 'Mihail', prenume: 'Adrian', nr_telefon: '0785123456', tip_angajat: 'Sofer', data_nastere: '1989-08-10', data_angajare: '2020-07-01', salariu: 3400, cod_masina: 7 },
+        { nume: 'Stan', prenume: 'Florin', nr_telefon: '0756123456', tip_angajat: 'Dispecer', data_nastere: '1983-12-20', data_angajare: '2017-04-10', salariu: 4300, cod_masina: null },
+        { nume: 'Radu', prenume: 'Elena', nr_telefon: '0723123456', tip_angajat: 'Sofer', data_nastere: '1995-01-12', data_angajare: '2022-06-20', salariu: 3100, cod_masina: 8 },
+        { nume: 'Bucur', prenume: 'Marian', nr_telefon: '0741123456', tip_angajat: 'Sofer', data_nastere: '1992-07-30', data_angajare: '2021-05-12', salariu: 3200, cod_masina: 11 },
+        { nume: 'Popa', prenume: 'Vlad', nr_telefon: '0729123456', tip_angajat: 'Dispecer', data_nastere: '1986-04-28', data_angajare: '2019-11-15', salariu: 4000, cod_masina: null },
+        { nume: 'Dima', prenume: 'Ioana', nr_telefon: '0798123456', tip_angajat: 'Sofer', data_nastere: '1980-09-22', data_angajare: '2018-02-05', salariu: 3600, cod_masina: 12 }
       ]);
 
     }
@@ -330,7 +330,10 @@ async function insertInitialDataOLTP() {
         { cod_angajat: 2, cod_locatie: 8 },
         { cod_angajat: 5, cod_locatie: 8 },
         { cod_angajat: 8, cod_locatie: 8 },
-        { cod_angajat: 7, cod_locatie: 9 }
+        { cod_angajat: 7, cod_locatie: 9 },
+        { cod_angajat: 4, cod_locatie: 1 },
+        { cod_angajat: 6, cod_locatie: 1 },
+        { cod_angajat: 9, cod_locatie: 1 }
       ]);
 
     }
@@ -559,14 +562,13 @@ async function insertInitialDataNORD() {
             judet: ["Suceava", "Botoșani", "Iași", "Neamț", "Bistrița-Năsăud", "Satu Mare", "Maramureș", "Sălaj", "Bihor", "Cluj", "Timiș", "Brașov", "Arad", "Sibiu", "Alba", "Bacău", "Hunedoara", "Galați", "Harghita", "Covasna", "Mureș", "Vaslui"]
           }
         }],
-        attributes: ['cod_angajat', 'nr_telefon', 'tip_angajat', 'dispecerat']
+        attributes: ['cod_angajat', 'nr_telefon', 'tip_angajat']
       });
 
-      const angajatiNord = angajatiNordRaw.map(({ cod_angajat, nr_telefon, tip_angajat, dispecerat }) => ({
+      const angajatiNord = angajatiNordRaw.map(({ cod_angajat, nr_telefon, tip_angajat }) => ({
         cod_angajat,
         nr_telefon,
-        tip_angajat,
-        dispecerat
+        tip_angajat
       }));
     
       await sequelizeNORD.models.AngajatContactNord.bulkCreate(angajatiNord);
@@ -696,14 +698,13 @@ async function insertInitialDataSUD() {
             judet: ["București", "Ilfov", "Dâmbovița", "Prahova", "Argeș", "Giurgiu", "Teleorman", "Ialomița", "Călărași", "Brăila", "Vrancea", "Dolj", "Olt", "Mehedinți", "Gorj", "Vâlcea", "Caraș-Severin", "Constanța", "Tulcea", "Buzău"]
           }
         }],
-        attributes: ['cod_angajat', 'nr_telefon', 'tip_angajat', 'dispecerat']
+        attributes: ['cod_angajat', 'nr_telefon', 'tip_angajat']
       });
 
-      const angajatiSud = angajatiSudRaw.map(({ cod_angajat, nr_telefon, tip_angajat, dispecerat }) => ({
+      const angajatiSud = angajatiSudRaw.map(({ cod_angajat, nr_telefon, tip_angajat }) => ({
         cod_angajat,
         nr_telefon,
-        tip_angajat,
-        dispecerat
+        tip_angajat
       }));
     
       await sequelizeSUD.models.AngajatContactSud.bulkCreate(angajatiSud);

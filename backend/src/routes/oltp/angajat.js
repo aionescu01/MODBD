@@ -34,7 +34,7 @@ const { createAngajat, getAllAngajati, getAngajatById, updateAngajat, deleteAnga
  *                 example: 0712345678
  *               tip_angajat:
  *                 type: string
- *                 example: Permanent
+ *                 example: Sofer
  *               data_nastere:
  *                 type: string
  *                 format: date
@@ -49,9 +49,6 @@ const { createAngajat, getAllAngajati, getAngajatById, updateAngajat, deleteAnga
  *               cod_masina:
  *                 type: integer
  *                 example: 12345
- *               dispecerat:
- *                 type: string
- *                 example: "Da"
  *     responses:
  *       201:
  *         description: Angajat creat cu succes.
@@ -91,7 +88,7 @@ router.post("/", createAngajat);
  *                     example: 0712345678
  *                   tip_angajat:
  *                     type: string
- *                     example: Permanent
+ *                     example: Sofer
  *                   data_nastere:
  *                     type: string
  *                     format: date
@@ -106,9 +103,6 @@ router.post("/", createAngajat);
  *                   cod_masina:
  *                     type: integer
  *                     example: 12345
- *                   dispecerat:
- *                     type: string
- *                     example: "Da"
  *       500:
  *         description: Eroare la preluarea angajaților.
  */
@@ -172,7 +166,7 @@ router.get("/:id", getAngajatById);
  *                 example: 0712345678
  *               tip_angajat:
  *                 type: string
- *                 example: Permanent
+ *                 example: Sofer
  *               data_nastere:
  *                 type: string
  *                 format: date
@@ -187,9 +181,6 @@ router.get("/:id", getAngajatById);
  *               cod_masina:
  *                 type: integer
  *                 example: 12345
- *               dispecerat:
- *                 type: string
- *                 example: "Da"
  *     responses:
  *       200:
  *         description: Angajat actualizat cu succes.

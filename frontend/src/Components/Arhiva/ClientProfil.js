@@ -106,7 +106,7 @@ const ClientProfilManagement = () => {
   };
 
   return (
-    <div>
+    <div className="parent">
       <Header/>
     
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
@@ -143,7 +143,7 @@ const ClientProfilManagement = () => {
               {clients.map((client) => (
                 <TableRow key={client.cod_client}>
                   <TableCell>{new Date(client.data_nastere).toLocaleDateString()}</TableCell>
-                  <TableCell>{client.nota}</TableCell>
+                  <TableCell>{Math.round(parseFloat(client.nota) * 10) / 10}</TableCell>
                   <TableCell>
                     <Stack direction="row" spacing={1}>
                       <IconButton
@@ -196,7 +196,7 @@ const ClientProfilManagement = () => {
                 label="Data Nașterii"
                 name="data_nastere"
                 type="date"
-                value={formData.data_nastere}
+                value={formData.data_nastere ? formData.data_nastere.split('T')[0] : ''}
                 onChange={handleInputChange}
                 InputLabelProps={{ shrink: true }}
                 fullWidth
@@ -205,8 +205,8 @@ const ClientProfilManagement = () => {
                 label="Notă"
                 name="nota"
                 type="number"
-                inputProps={{ step: "0.1", min: "1", max: "5" }}
-                value={formData.nota}
+                inputProps={{ step: "0.1", min: "1", max: "10" }}
+                value={ Math.round(parseFloat(formData.nota) * 10) / 10 }
                 onChange={handleInputChange}
                 fullWidth
               />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import './Layout.css';
 import {
   Table,
   TableBody,
@@ -112,7 +113,7 @@ const DiscountManagement = () => {
   };
 
   return (
-    <div>
+    <div className="parent">
       <Header/>
       <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
         <Paper sx={{ p: 2 }}>

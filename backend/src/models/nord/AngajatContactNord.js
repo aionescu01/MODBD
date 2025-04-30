@@ -16,9 +16,6 @@ const AngajatContactNord = sequelizeNORD.define("AngajatContactNord",
             type: DataTypes.STRING(25),
             allowNull: false,
         },
-        dispecerat: {
-            type: DataTypes.STRING(25),
-        },
     },
     {
         freezeTableName: true,

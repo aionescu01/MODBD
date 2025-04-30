@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import './Layout.css';
 import {
   Table,
   TableBody,
@@ -109,7 +110,7 @@ const MasiniManagement = () => {
   };
 
   return (
-    <div>
+    <div className="parent">
       <Header/>
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
       <Paper sx={{ p: 2 }}>
@@ -204,7 +205,7 @@ const MasiniManagement = () => {
                 name="data_achizitionare"
                 type="date"
                 InputLabelProps={{ shrink: true }}
-                value={formData.data_achizitionare}
+                value={formData.data_achizitionare ? formData.data_achizitionare.split('T')[0] : ''}
                 onChange={handleInputChange}
                 fullWidth
               />
@@ -213,7 +214,7 @@ const MasiniManagement = () => {
                 name="data_revizie_urm"
                 type="date"
                 InputLabelProps={{ shrink: true }}
-                value={formData.data_revizie_urm}
+                value={formData.data_revizie_urm ? formData.data_revizie_urm.split('T')[0] : ''}
                 onChange={handleInputChange}
                 fullWidth
               />

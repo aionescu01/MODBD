@@ -16,9 +16,6 @@ const AngajatContactSud = sequelizeSUD.define("AngajatContactSud",
             type: DataTypes.STRING(25),
             allowNull: false,
         },
-        dispecerat: {
-            type: DataTypes.STRING(25),
-        },
     },
     {
         freezeTableName: true,

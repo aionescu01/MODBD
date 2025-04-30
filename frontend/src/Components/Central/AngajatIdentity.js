@@ -106,8 +106,8 @@ const AngajatIdentityManagement = () => {
   };
 
   return (
-    <div>
-    <Header/>
+    <div className="parent">
+      <Header/>
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
       <Paper sx={{ p: 2 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>

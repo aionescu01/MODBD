@@ -113,7 +113,7 @@ const DetaliiCursaCentralManagement = () => {
   };
 
   return (
-    <div>
+    <div className="parent">
       <Header/>
       <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
         <Paper sx={{ p: 2 }}>

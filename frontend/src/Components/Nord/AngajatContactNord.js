@@ -34,8 +34,7 @@ const AngajatContactNordManagement = () => {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [formData, setFormData] = useState({
     nr_telefon: '',
-    tip_angajat: '',
-    dispecerat: ''
+    tip_angajat: ''
   });
 
   useEffect(() => {
@@ -80,8 +79,7 @@ const AngajatContactNordManagement = () => {
       setSelectedEmployee(null);
       setFormData({
         nr_telefon: '',
-        tip_angajat: '',
-        dispecerat: ''
+        tip_angajat: ''
       });
       fetchEmployees();
     } catch (error) {
@@ -109,8 +107,8 @@ const AngajatContactNordManagement = () => {
   };
 
   return (
-    <div>
-    <Header/>
+    <div className="parent">
+      <Header/>
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
       <Paper sx={{ p: 2 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -123,8 +121,7 @@ const AngajatContactNordManagement = () => {
               setSelectedEmployee(null);
               setFormData({
                 nr_telefon: '',
-                tip_angajat: '',
-                dispecerat: ''
+                tip_angajat: ''
               });
               setOpenDialog(true);
             }}
@@ -139,7 +136,6 @@ const AngajatContactNordManagement = () => {
               <TableRow>
                 <TableCell>Telefon</TableCell>
                 <TableCell>Tip</TableCell>
-                <TableCell>Dispecerat</TableCell>
                 <TableCell>Acțiuni</TableCell>
               </TableRow>
             </TableHead>
@@ -148,7 +144,6 @@ const AngajatContactNordManagement = () => {
                 <TableRow key={employee.cod_angajat}>
                   <TableCell>{employee.nr_telefon}</TableCell>
                   <TableCell>{employee.tip_angajat}</TableCell>
-                  <TableCell>{employee.dispecerat}</TableCell>
                   <TableCell>
                     <Stack direction="row" spacing={1}>
                       <IconButton
@@ -212,19 +207,8 @@ const AngajatContactNordManagement = () => {
                 onChange={handleInputChange}
                 fullWidth
               >
-                <MenuItem value="Permanent">Permanent</MenuItem>
-                <MenuItem value="Temporar">Temporar</MenuItem>
-              </TextField>
-              <TextField
-                select
-                label="Dispecerat"
-                name="dispecerat"
-                value={formData.dispecerat}
-                onChange={handleInputChange}
-                fullWidth
-              >
-                <MenuItem value="Da">Da</MenuItem>
-                <MenuItem value="Nu">Nu</MenuItem>
+                <MenuItem value="Sofer">Sofer</MenuItem>
+                <MenuItem value="Dispecer">Dispecer</MenuItem>
               </TextField>
             </Box>
           </DialogContent>

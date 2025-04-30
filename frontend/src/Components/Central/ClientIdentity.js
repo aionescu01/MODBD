@@ -106,7 +106,7 @@ const ClientIdentityManagement = () => {
   };
 
   return (
-    <div>
+    <div className="parent">
       <Header/>
     
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>

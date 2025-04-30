@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import './Layout.css';
 import {
   Table,
   TableBody,
@@ -115,7 +116,7 @@ const ClientManagement = () => {
   };
 
   return (
-    <div>
+    <div className="parent">
       <Header/>
     
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
@@ -164,7 +165,7 @@ const ClientManagement = () => {
                   <TableCell>{client.nr_telefon}</TableCell>
                   <TableCell>{client.apelativ}</TableCell>
                   <TableCell>{new Date(client.data_nastere).toLocaleDateString()}</TableCell>
-                  <TableCell>{client.nota}</TableCell>
+                  <TableCell>{Math.round(parseFloat(client.nota) * 10) / 10}</TableCell>
                   <TableCell>
                     <Stack direction="row" spacing={1}>
                       <IconButton
@@ -250,7 +251,7 @@ const ClientManagement = () => {
                 label="Data Nașterii"
                 name="data_nastere"
                 type="date"
-                value={formData.data_nastere}
+                value={formData.data_nastere ? formData.data_nastere.split('T')[0] : ''}
                 onChange={handleInputChange}
                 InputLabelProps={{ shrink: true }}
                 fullWidth
@@ -259,8 +260,8 @@ const ClientManagement = () => {
                 label="Notă"
                 name="nota"
                 type="number"
-                inputProps={{ step: "0.1", min: "1", max: "5" }}
-                value={formData.nota}
+                inputProps={{ step: "0.1", min: "1", max: "10" }}
+                value={ Math.round(parseFloat(formData.nota) * 10) / 10 }
                 onChange={handleInputChange}
                 fullWidth
               />

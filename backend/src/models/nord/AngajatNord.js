@@ -39,9 +39,6 @@ const AngajatNord = sequelizeNORD.define("AngajatNord",
         cod_masina: {
             type: DataTypes.INTEGER,
         },
-        dispecerat: {
-            type: DataTypes.STRING(25),
-        },
     },
     {
         freezeTableName: true,

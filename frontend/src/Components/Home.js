@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import './Home.css';
+import './Layout.css';
 import { NavLink } from "react-router-dom";
 import Header from "./Header"
 import Footer from "./Footer"
@@ -69,7 +70,7 @@ const Home = () => {
   return (
     <div className="page-container">
       <Header />
-      <main className="main-content">
+      <main className="main-content MuiContainer-root">
         <motion.h1
           className="title"
           initial={{ opacity: 0, scale: 0.8 }}

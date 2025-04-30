@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import './Layout.css';
 import {
   Table,
   TableBody,
@@ -40,8 +41,7 @@ const AngajatManagement = () => {
     data_nastere: '',
     data_angajare: '',
     salariu: '',
-    cod_masina: '',
-    dispecerat: ''
+    cod_masina: ''
   });
 
   useEffect(() => {
@@ -92,8 +92,7 @@ const AngajatManagement = () => {
         data_nastere: '',
         data_angajare: '',
         salariu: '',
-        cod_masina: '',
-        dispecerat: ''
+        cod_masina: ''
       });
       fetchEmployees();
     } catch (error) {
@@ -121,8 +120,8 @@ const AngajatManagement = () => {
   };
 
   return (
-    <div>
-    <Header/>
+    <div className="parent">
+      <Header/>
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
       <Paper sx={{ p: 2 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -141,8 +140,7 @@ const AngajatManagement = () => {
                 data_nastere: '',
                 data_angajare: '',
                 salariu: '',
-                cod_masina: '',
-                dispecerat: ''
+                cod_masina: ''
               });
               setOpenDialog(true);
             }}
@@ -163,7 +161,6 @@ const AngajatManagement = () => {
                 <TableCell>Data Angajării</TableCell>
                 <TableCell>Salariu</TableCell>
                 <TableCell>Cod Mașină</TableCell>
-                <TableCell>Dispecerat</TableCell>
                 <TableCell>Acțiuni</TableCell>
               </TableRow>
             </TableHead>
@@ -178,7 +175,6 @@ const AngajatManagement = () => {
                   <TableCell>{new Date(employee.data_angajare).toLocaleDateString()}</TableCell>
                   <TableCell>{employee.salariu}</TableCell>
                   <TableCell>{employee.cod_masina}</TableCell>
-                  <TableCell>{employee.dispecerat}</TableCell>
                   <TableCell>
                     <Stack direction="row" spacing={1}>
                       <IconButton
@@ -256,14 +252,14 @@ const AngajatManagement = () => {
                 onChange={handleInputChange}
                 fullWidth
               >
-                <MenuItem value="Permanent">Permanent</MenuItem>
-                <MenuItem value="Temporar">Temporar</MenuItem>
+                <MenuItem value="Sofer">Sofer</MenuItem>
+                <MenuItem value="Dispecer">Dispecer</MenuItem>
               </TextField>
               <TextField
                 label="Data Nașterii"
                 name="data_nastere"
                 type="date"
-                value={formData.data_nastere}
+                value={formData.data_nastere ? formData.data_nastere.split('T')[0] : ''}
                 onChange={handleInputChange}
                 InputLabelProps={{ shrink: true }}
                 fullWidth
@@ -272,7 +268,7 @@ const AngajatManagement = () => {
                 label="Data Angajării"
                 name="data_angajare"
                 type="date"
-                value={formData.data_angajare}
+                value={formData.data_angajare ? formData.data_angajare.split('T')[0] : ''}
                 onChange={handleInputChange}
                 InputLabelProps={{ shrink: true }}
                 fullWidth
@@ -293,17 +289,6 @@ const AngajatManagement = () => {
                 onChange={handleInputChange}
                 fullWidth
               />
-              <TextField
-                select
-                label="Dispecerat"
-                name="dispecerat"
-                value={formData.dispecerat}
-                onChange={handleInputChange}
-                fullWidth
-              >
-                <MenuItem value="Da">Da</MenuItem>
-                <MenuItem value="Nu">Nu</MenuItem>
-              </TextField>
             </Box>
           </DialogContent>
           <DialogActions>

@@ -28,10 +28,7 @@ const { createAngajatContact, getAllAngajatContact, getAngajatContactById, updat
  *                 example: 0712345678
  *               tip_angajat:
  *                 type: string
- *                 example: Permanent
- *               dispecerat:
- *                 type: string
- *                 example: "Da"
+ *                 example: Sofer
  *     responses:
  *       201:
  *         description: AngajatContact creat cu succes.
@@ -62,10 +59,7 @@ router.post("/", createAngajatContact);
  *                     example: 0712345678
  *                   tip_angajat:
  *                     type: string
- *                     example: Permanent
- *                   dispecerat:
- *                     type: string
- *                     example: "Da"
+ *                     example: Sofer
  *       500:
  *         description: Eroare la preluarea angajaților.
  */
@@ -123,10 +117,7 @@ router.get("/:id", getAngajatContactById);
  *                 example: 0712345678
  *               tip_angajat:
  *                 type: string
- *                 example: Permanent
- *               dispecerat:
- *                 type: string
- *                 example: "Da"
+ *                 example: Sofer
  *     responses:
  *       200:
  *         description: AngajatContact actualizat cu succes.

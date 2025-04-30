@@ -39,9 +39,6 @@ const Angajat = sequelizeOLTP.define("Angajat",
         cod_masina: {
             type: DataTypes.INTEGER,
         },
-        dispecerat: {
-            type: DataTypes.STRING(25),
-        },
     },
     {
         freezeTableName: true,
