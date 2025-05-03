@@ -38,4 +38,6 @@ BEGIN
         EXECUTE IMMEDIATE 'CREATE USER client IDENTIFIED BY client_password';
         EXECUTE IMMEDIATE 'GRANT CONNECT TO client';
     END IF;
+
+    COMMIT;
 END;

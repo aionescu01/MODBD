@@ -144,8 +144,9 @@ async function syncDatabases() {
 
     await insertInitialDataOLTP();
 
-    await runSQLScript(sequelizeARHIVA, './scripts/oltp-add-constraints.sql', 'adaugare constrangeri tabele OLTP');
+    await runSQLScript(sequelizeARHIVA, './scripts/audit-add-constraints.sql', 'adaugare constrangeri tabele OLTP');
     await runSQLScript(sequelizeOLTP, './scripts/oltp-grant-permissions-tables-users.sql', 'adaugare permisiuni tabele OLTP');
+    await runSQLScript(sequelizeOLTP, './scripts/oltp-add-links.sql', 'adaugare link-uri către celelalte pdb-uri');
 
     await sequelizeNORD.sync({ force: true });
     await addMessageToDatabase("Baza de date NORD sincronizata cu succes!", "I", "Admin");
@@ -163,6 +164,22 @@ async function syncDatabases() {
     await insertInitialDataCENTRAL();
 
     await insertInitialDataARHIVA();
+
+    // Rulare scripts SQL pe datele initiale
+
+    await runSQLScript(sequelizeOLTP, './scripts/analiza-ex7.sql', 'executare script Analiza Ex.7');
+
+    await runSQLScript(sequelizeOLTP, './scripts/backend-ex4.sql', 'executare script Backend Ex.4');
+
+    await runSQLScript(sequelizeOLTP, './scripts/backend-ex5-oltp-sync.sql', 'executare script Backend Ex.5');
+
+    await runSQLScript(sequelizeOLTP, './scripts/backend-ex6-oltp.sql', 'executare script Ex.6 aplicare constrângeri OLTP');
+    await runSQLScript(sequelizeARHIVA, './scripts/backend-ex6-arhiva.sql', 'executare script Ex.6 aplicare constrângeri ARHIVA');
+    await runSQLScript(sequelizeNORD, './scripts/backend-ex6-nord.sql', 'executare script Ex.6 aplicare constrângeri NORD');
+    await runSQLScript(sequelizeCENTRAL, './scripts/backend-ex6-central.sql', 'executare script Ex.6 aplicare constrângeri CENTRAL');
+    await runSQLScript(sequelizeSUD, './scripts/backend-ex6-sud.sql', 'executare script Ex.6 aplicare constrângeri SUD');
+
+    await runSQLScript(sequelizeOLTP, './scripts/backend-ex7.sql', 'executare script Ex.7 Optimizarea cererii SQL propusă în raportul de analiză');
 
     app.listen(PORT, () =>
       console.log(`DB ruleaza pe portul ${PORT}`)
@@ -377,31 +394,31 @@ async function insertInitialDataOLTP() {
     if (existingDetaliiCurse.length === 0) {
 
       await sequelizeOLTP.models.DetaliiCursa.bulkCreate([
-        { cod_cursa: 1, data_cursa: new Date('2025-01-01'), nota_sofer: 8, nota_client: 9 },
-        { cod_cursa: 2, data_cursa: new Date('2025-02-02'), nota_sofer: 7, nota_client: 8 },
-        { cod_cursa: 3, data_cursa: new Date('2025-01-03'), nota_sofer: 9, nota_client: 9 },
-        { cod_cursa: 4, data_cursa: new Date('2025-02-04'), nota_sofer: 6, nota_client: 7 },
-        { cod_cursa: 5, data_cursa: new Date('2025-01-05'), nota_sofer: 8, nota_client: 7 },
-        { cod_cursa: 6, data_cursa: new Date('2025-02-06'), nota_sofer: 9, nota_client: 8 },
-        { cod_cursa: 7, data_cursa: new Date('2025-01-07'), nota_sofer: 7, nota_client: 6 },
-        { cod_cursa: 8, data_cursa: new Date('2025-02-08'), nota_sofer: 8, nota_client: 8 },
-        { cod_cursa: 9, data_cursa: new Date('2025-01-09'), nota_sofer: 6, nota_client: 6 },
-        { cod_cursa: 10, data_cursa: new Date('2025-02-10'), nota_sofer: 9, nota_client: 8 },
-        { cod_cursa: 11, data_cursa: new Date('2025-01-11'), nota_sofer: 7, nota_client: 7 },
-        { cod_cursa: 12, data_cursa: new Date('2025-01-12'), nota_sofer: 8, nota_client: 8 },
-        { cod_cursa: 13, data_cursa: new Date('2025-01-13'), nota_sofer: 7, nota_client: 7 },
-        { cod_cursa: 14, data_cursa: new Date('2025-02-14'), nota_sofer: 6, nota_client: 8 },
-        { cod_cursa: 15, data_cursa: new Date('2025-02-15'), nota_sofer: 8, nota_client: 8 },
-        { cod_cursa: 16, data_cursa: new Date('2025-02-16'), nota_sofer: 9, nota_client: 9 },
-        { cod_cursa: 17, data_cursa: new Date('2025-01-17'), nota_sofer: 7, nota_client: 6 },
-        { cod_cursa: 18, data_cursa: new Date('2025-02-18'), nota_sofer: 6, nota_client: 7 },
-        { cod_cursa: 19, data_cursa: new Date('2025-02-19'), nota_sofer: 9, nota_client: 9 },
-        { cod_cursa: 20, data_cursa: new Date('2025-02-20'), nota_sofer: 8, nota_client: 7 },
-        { cod_cursa: 21, data_cursa: new Date('2025-01-21'), nota_sofer: 8, nota_client: 8 },
-        { cod_cursa: 22, data_cursa: new Date('2025-01-22'), nota_sofer: 7, nota_client: 9 },
-        { cod_cursa: 23, data_cursa: new Date('2025-01-23'), nota_sofer: 6, nota_client: 7 },
-        { cod_cursa: 24, data_cursa: new Date('2025-01-24'), nota_sofer: 9, nota_client: 6 },
-        { cod_cursa: 25, data_cursa: new Date('2025-02-25'), nota_sofer: 8, nota_client: 7 }
+        { cod_cursa: 1, data_cursa: new Date('2025-04-24'), nota_sofer: 8, nota_client: 9 },
+        { cod_cursa: 2, data_cursa: new Date('2025-04-01'), nota_sofer: 7, nota_client: 8 },
+        { cod_cursa: 3, data_cursa: new Date('2025-04-24'), nota_sofer: 9, nota_client: 9 },
+        { cod_cursa: 4, data_cursa: new Date('2025-04-11'), nota_sofer: 6, nota_client: 7 },
+        { cod_cursa: 5, data_cursa: new Date('2025-04-24'), nota_sofer: 8, nota_client: 7 },
+        { cod_cursa: 6, data_cursa: new Date('2025-04-08'), nota_sofer: 9, nota_client: 8 },
+        { cod_cursa: 7, data_cursa: new Date('2025-04-01'), nota_sofer: 7, nota_client: 6 },
+        { cod_cursa: 8, data_cursa: new Date('2025-04-04'), nota_sofer: 8, nota_client: 8 },
+        { cod_cursa: 9, data_cursa: new Date('2025-04-15'), nota_sofer: 6, nota_client: 6 },
+        { cod_cursa: 10, data_cursa: new Date('2025-04-16'), nota_sofer: 9, nota_client: 8 },
+        { cod_cursa: 11, data_cursa: new Date('2025-04-04'), nota_sofer: 7, nota_client: 7 },
+        { cod_cursa: 12, data_cursa: new Date('2025-04-30'), nota_sofer: 8, nota_client: 8 },
+        { cod_cursa: 13, data_cursa: new Date('2025-04-24'), nota_sofer: 7, nota_client: 7 },
+        { cod_cursa: 14, data_cursa: new Date('2025-04-12'), nota_sofer: 6, nota_client: 8 },
+        { cod_cursa: 15, data_cursa: new Date('2025-04-15'), nota_sofer: 8, nota_client: 8 },
+        { cod_cursa: 16, data_cursa: new Date('2025-04-17'), nota_sofer: 9, nota_client: 9 },
+        { cod_cursa: 17, data_cursa: new Date('2025-04-10'), nota_sofer: 7, nota_client: 6 },
+        { cod_cursa: 18, data_cursa: new Date('2025-04-02'), nota_sofer: 6, nota_client: 7 },
+        { cod_cursa: 19, data_cursa: new Date('2025-05-01'), nota_sofer: 9, nota_client: 9 },
+        { cod_cursa: 20, data_cursa: new Date('2025-04-04'), nota_sofer: 8, nota_client: 7 },
+        { cod_cursa: 21, data_cursa: new Date('2025-05-01'), nota_sofer: 8, nota_client: 8 },
+        { cod_cursa: 22, data_cursa: new Date('2025-04-11'), nota_sofer: 7, nota_client: 9 },
+        { cod_cursa: 23, data_cursa: new Date('2025-04-01'), nota_sofer: 6, nota_client: 7 },
+        { cod_cursa: 24, data_cursa: new Date('2025-04-04'), nota_sofer: 9, nota_client: 6 },
+        { cod_cursa: 25, data_cursa: new Date('2025-04-09'), nota_sofer: 8, nota_client: 7 }
       ]);
 
     }

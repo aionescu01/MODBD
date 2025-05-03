@@ -50,6 +50,7 @@ services:
     volumes:
       - db-data:/opt/oracle/oradata
       - ./scripts:/docker-entrypoint-initdb.d
+      # - ./config/tnsnames.ora:/opt/oracle/product/19c/dbhome_1/network/admin/tnsnames.ora
     networks:
       - my-network
 

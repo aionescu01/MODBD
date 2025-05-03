@@ -11,4 +11,6 @@ BEGIN
                            ADD CONSTRAINT MESSAGE_TYPE_CHECK
                            CHECK (MESSAGE_TYPE IN (''E'', ''W'', ''I''))';
     END IF;
+
+    COMMIT;
 END;

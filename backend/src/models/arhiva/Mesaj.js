@@ -30,6 +30,7 @@ const Mesaj = sequelizeARHIVA.define("Mesaj",
   {
       freezeTableName: true,
       tableName: "MESAJ",
+      timestamps: false,
   }
 );
 

@@ -22,7 +22,7 @@ const DetaliiCursaNord = sequelizeNORD.define("DetaliiCursaNord",
   },
   {
       freezeTableName: true,
-      tableName: "DETALII_CURSA",
+      tableName: "DETALII_CURSA_NORD",
       timestamps: false,
   }
 );

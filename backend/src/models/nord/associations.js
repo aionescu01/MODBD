@@ -7,20 +7,20 @@ const Masina = require("../oltp/Masina");
 const Client = require("../oltp/Client");
 
 
-CursaNord.belongsTo(AngajatNord, { foreignKey: "cod_sofer" });
-AngajatNord.hasMany(CursaNord, { foreignKey: "cod_sofer" });
+CursaNord.belongsTo(AngajatNord, { foreignKey: "cod_sofer", onDelete: "CASCADE" });
+AngajatNord.hasMany(CursaNord, { foreignKey: "cod_sofer", onDelete: "CASCADE" });
 
-CursaNord.belongsTo(LocatiiNord, { foreignKey: "cod_locatie" });
-LocatiiNord.hasMany(CursaNord, { foreignKey: "cod_locatie" });
+CursaNord.belongsTo(LocatiiNord, { foreignKey: "cod_locatie", onDelete: "CASCADE" });
+LocatiiNord.hasMany(CursaNord, { foreignKey: "cod_locatie", onDelete: "CASCADE" });
 
-CursaNord.hasOne(DetaliiCursaNord, { foreignKey: "cod_cursa" });
-DetaliiCursaNord.belongsTo(CursaNord, { foreignKey: "cod_cursa" });
+CursaNord.hasOne(DetaliiCursaNord, { foreignKey: "cod_cursa", onDelete: "CASCADE" });
+DetaliiCursaNord.belongsTo(CursaNord, { foreignKey: "cod_cursa", onDelete: "CASCADE" });
 
-CursaNord.belongsTo(Client, { foreignKey: "cod_client" });
-Client.hasMany(CursaNord, { foreignKey: "cod_client" });
+CursaNord.belongsTo(Client, { foreignKey: "cod_client", onDelete: "CASCADE" });
+Client.hasMany(CursaNord, { foreignKey: "cod_client", onDelete: "CASCADE" });
 
-CursaNord.belongsTo(Masina, { foreignKey: "cod_masina" });
-Masina.hasMany(CursaNord, { foreignKey: "cod_masina" });
+CursaNord.belongsTo(Masina, { foreignKey: "cod_masina", onDelete: "CASCADE" });
+Masina.hasMany(CursaNord, { foreignKey: "cod_masina", onDelete: "CASCADE" });
 
-AngajatNord.belongsTo(Masina, { foreignKey: "cod_masina" });
-Masina.hasMany(AngajatNord, { foreignKey: "cod_masina" });
+AngajatNord.belongsTo(Masina, { foreignKey: "cod_masina", onDelete: "CASCADE" });
+Masina.hasMany(AngajatNord, { foreignKey: "cod_masina", onDelete: "CASCADE" });

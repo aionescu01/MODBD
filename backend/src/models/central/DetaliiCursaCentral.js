@@ -22,7 +22,7 @@ const DetaliiCursaCentral = sequelizeCENTRAL.define("DetaliiCursaCentral",
   },
   {
       freezeTableName: true,
-      tableName: "DETALII_CURSA",
+      tableName: "DETALII_CURSA_CENTRAL",
       timestamps: false,
   }
 );

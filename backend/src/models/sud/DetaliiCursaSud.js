@@ -22,7 +22,7 @@ const DetaliiCursaSud = sequelizeSUD.define("DetaliiCursaSud",
   },
   {
       freezeTableName: true,
-      tableName: "DETALII_CURSA",
+      tableName: "DETALII_CURSA_SUD",
       timestamps: false,
   }
 );
