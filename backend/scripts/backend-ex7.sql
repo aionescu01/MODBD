@@ -65,10 +65,29 @@ DECLARE
 BEGIN
     -- 1. Creare indexuri utile
 
-    EXECUTE IMMEDIATE 'CREATE INDEX idx_dc_data_cursa ON DETALII_CURSA(data_cursa)';
-    EXECUTE IMMEDIATE 'CREATE INDEX idx_f_cod_cursa ON FACTURA(cod_cursa)';
-    EXECUTE IMMEDIATE 'CREATE INDEX idx_c_cod_sofer ON CURSA(cod_sofer)';
-    EXECUTE IMMEDIATE 'CREATE INDEX idx_c_cod_locatie ON CURSA(cod_locatie)';
+    -- Index pe DETALII_CURSA(data_cursa)
+    SELECT COUNT(*) INTO v_count FROM USER_INDEXES WHERE INDEX_NAME = 'IDX_DC_DATA_CURSA';
+    IF v_count = 0 THEN
+        EXECUTE IMMEDIATE 'CREATE INDEX idx_dc_data_cursa ON DETALII_CURSA(data_cursa)';
+    END IF;
+
+    -- Index pe FACTURA(cod_cursa)
+    SELECT COUNT(*) INTO v_count FROM USER_INDEXES WHERE INDEX_NAME = 'IDX_F_COD_CURSA';
+    IF v_count = 0 THEN
+        EXECUTE IMMEDIATE 'CREATE INDEX idx_f_cod_cursa ON FACTURA(cod_cursa)';
+    END IF;
+
+    -- Index pe CURSA(cod_sofer)
+    SELECT COUNT(*) INTO v_count FROM USER_INDEXES WHERE INDEX_NAME = 'IDX_C_COD_SOFER';
+    IF v_count = 0 THEN
+        EXECUTE IMMEDIATE 'CREATE INDEX idx_c_cod_sofer ON CURSA(cod_sofer)';
+    END IF;
+
+    -- Index pe CURSA(cod_locatie)
+    SELECT COUNT(*) INTO v_count FROM USER_INDEXES WHERE INDEX_NAME = 'IDX_C_COD_LOCATIE';
+    IF v_count = 0 THEN
+        EXECUTE IMMEDIATE 'CREATE INDEX idx_c_cod_locatie ON CURSA(cod_locatie)';
+    END IF;
 
     COMMIT;
 

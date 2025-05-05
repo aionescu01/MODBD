@@ -1,0 +1,27 @@
+-- Adăugare link-uri către celelalte pdb-uri, daca nu exista
+
+DECLARE
+    link_exists NUMBER;
+BEGIN
+    -- Verifică dacă link-ul 'sud_link' există deja
+    SELECT COUNT(*) INTO link_exists
+    FROM all_db_links
+    WHERE db_link = 'SUD_LINK';
+
+    IF link_exists = 0 THEN
+        -- Creează link-ul 'sud_link' dacă nu există
+        EXECUTE IMMEDIATE 'CREATE DATABASE LINK sud_link CONNECT TO admin IDENTIFIED BY admin USING ''sud''';
+    END IF;
+
+    -- Verifică dacă link-ul 'central_link' există deja
+    SELECT COUNT(*) INTO link_exists
+    FROM all_db_links
+    WHERE db_link = 'CENTRAL_LINK';
+
+    IF link_exists = 0 THEN
+        -- Creează link-ul 'central_link' dacă nu există
+        EXECUTE IMMEDIATE 'CREATE DATABASE LINK central_link CONNECT TO admin IDENTIFIED BY admin USING ''central''';
+    END IF;
+
+    COMMIT;
+END;

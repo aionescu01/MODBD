@@ -140,13 +140,17 @@ async function syncDatabases() {
     await sequelizeOLTP.sync({ force: true });
     await addMessageToDatabase("Baza de date OLTP sincronizata cu succes!", "I", "Admin");
 
-    await runSQLScript(sequelizeOLTP, './scripts/oltp-add-users.sql', 'adaugare utilizatori in OLTP');
+    await runSQLScript(sequelizeOLTP, './scripts/oltp-add-users.sql', 'Adaugare utilizatori in OLTP');
 
     await insertInitialDataOLTP();
 
-    await runSQLScript(sequelizeARHIVA, './scripts/audit-add-constraints.sql', 'adaugare constrangeri tabele OLTP');
-    await runSQLScript(sequelizeOLTP, './scripts/oltp-grant-permissions-tables-users.sql', 'adaugare permisiuni tabele OLTP');
-    await runSQLScript(sequelizeOLTP, './scripts/oltp-add-links.sql', 'adaugare link-uri către celelalte pdb-uri');
+    await runSQLScript(sequelizeARHIVA, './scripts/audit-add-constraints.sql', 'Adaugare constrangeri tabele OLTP');
+    await runSQLScript(sequelizeOLTP, './scripts/oltp-grant-permissions-tables-users.sql', 'Adaugare permisiuni tabele OLTP');
+
+    await runSQLScript(sequelizeOLTP, './scripts/oltp-add-links.sql', 'OLTP adaugare link-uri către celelalte pdb-uri');
+    await runSQLScript(sequelizeNORD, './scripts/nord-add-links.sql', 'NORD adaugare link-uri către celelalte pdb-uri');
+    await runSQLScript(sequelizeSUD, './scripts/sud-add-links.sql', 'SUD adaugare link-uri către celelalte pdb-uri');
+    await runSQLScript(sequelizeCENTRAL, './scripts/central-add-links.sql', 'CENTRAL adaugare link-uri către celelalte pdb-uri');
 
     await sequelizeNORD.sync({ force: true });
     await addMessageToDatabase("Baza de date NORD sincronizata cu succes!", "I", "Admin");
@@ -167,19 +171,19 @@ async function syncDatabases() {
 
     // Rulare scripts SQL pe datele initiale
 
-    await runSQLScript(sequelizeOLTP, './scripts/analiza-ex7.sql', 'executare script Analiza Ex.7');
+    await runSQLScript(sequelizeOLTP, './scripts/analiza-ex9.sql', 'Executare script Analiza Ex.9');
 
-    await runSQLScript(sequelizeOLTP, './scripts/backend-ex4.sql', 'executare script Backend Ex.4');
+    await runSQLScript(sequelizeOLTP, './scripts/backend-ex4.sql', 'Executare script Backend Ex.4');
 
-    await runSQLScript(sequelizeOLTP, './scripts/backend-ex5-oltp-sync.sql', 'executare script Backend Ex.5');
+    await runSQLScript(sequelizeOLTP, './scripts/backend-ex5-oltp-sync.sql', 'Executare script Backend Ex.5');
 
-    await runSQLScript(sequelizeOLTP, './scripts/backend-ex6-oltp.sql', 'executare script Ex.6 aplicare constrângeri OLTP');
-    await runSQLScript(sequelizeARHIVA, './scripts/backend-ex6-arhiva.sql', 'executare script Ex.6 aplicare constrângeri ARHIVA');
-    await runSQLScript(sequelizeNORD, './scripts/backend-ex6-nord.sql', 'executare script Ex.6 aplicare constrângeri NORD');
-    await runSQLScript(sequelizeCENTRAL, './scripts/backend-ex6-central.sql', 'executare script Ex.6 aplicare constrângeri CENTRAL');
-    await runSQLScript(sequelizeSUD, './scripts/backend-ex6-sud.sql', 'executare script Ex.6 aplicare constrângeri SUD');
+    await runSQLScript(sequelizeOLTP, './scripts/backend-ex6-oltp.sql', 'Executare script Ex.6 aplicare constrângeri OLTP');
+    await runSQLScript(sequelizeARHIVA, './scripts/backend-ex6-arhiva.sql', 'Executare script Ex.6 aplicare constrângeri ARHIVA');
+    await runSQLScript(sequelizeNORD, './scripts/backend-ex6-nord.sql', 'Executare script Ex.6 aplicare constrângeri NORD');
+    await runSQLScript(sequelizeCENTRAL, './scripts/backend-ex6-central.sql', 'Executare script Ex.6 aplicare constrângeri CENTRAL');
+    await runSQLScript(sequelizeSUD, './scripts/backend-ex6-sud.sql', 'Executare script Ex.6 aplicare constrângeri SUD');
 
-    await runSQLScript(sequelizeOLTP, './scripts/backend-ex7.sql', 'executare script Ex.7 Optimizarea cererii SQL propusă în raportul de analiză');
+    await runSQLScript(sequelizeOLTP, './scripts/backend-ex7.sql', 'Executare script Ex.7 Optimizarea cererii SQL propusă în raportul de analiză');
 
     app.listen(PORT, () =>
       console.log(`DB ruleaza pe portul ${PORT}`)
