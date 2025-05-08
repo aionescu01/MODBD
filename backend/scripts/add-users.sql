@@ -1,4 +1,4 @@
--- Crearea utilizatorilor pentru OLTP și atribuirea unor privilegii de bază
+-- Crearea utilizatorilor și atribuirea unor privilegii de bază
 
 DECLARE
     v_user_exists NUMBER;

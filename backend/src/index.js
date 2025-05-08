@@ -134,13 +134,17 @@ async function runSQLScript(sequelize, filePath, message) {
 
 async function syncDatabases() {
   try {
-    await sequelizeARHIVA.sync({ force: true });
+    await sequelizeARHIVA.sync({ force: true, timeout: 30000 });
     await addMessageToDatabase("Baza de date ARHIVA sincronizata cu succes!", "I", "Admin");
 
-    await sequelizeOLTP.sync({ force: true });
+    await sequelizeOLTP.sync({ force: true, timeout: 30000 });
     await addMessageToDatabase("Baza de date OLTP sincronizata cu succes!", "I", "Admin");
 
-    await runSQLScript(sequelizeOLTP, './scripts/oltp-add-users.sql', 'Adaugare utilizatori in OLTP');
+    await runSQLScript(sequelizeOLTP, './scripts/add-users.sql', 'Adaugare utilizatori in OLTP');
+    await runSQLScript(sequelizeNORD, './scripts/add-users.sql', 'Adaugare utilizatori in NORD');
+    await runSQLScript(sequelizeSUD, './scripts/add-users.sql', 'Adaugare utilizatori in SUD');
+    await runSQLScript(sequelizeCENTRAL, './scripts/add-users.sql', 'Adaugare utilizatori in CENTRAL');
+    await runSQLScript(sequelizeARHIVA, './scripts/add-users.sql', 'Adaugare utilizatori in ARHIVA');
 
     await insertInitialDataOLTP();
 
@@ -151,18 +155,19 @@ async function syncDatabases() {
     await runSQLScript(sequelizeNORD, './scripts/nord-add-links.sql', 'NORD adaugare link-uri către celelalte pdb-uri');
     await runSQLScript(sequelizeSUD, './scripts/sud-add-links.sql', 'SUD adaugare link-uri către celelalte pdb-uri');
     await runSQLScript(sequelizeCENTRAL, './scripts/central-add-links.sql', 'CENTRAL adaugare link-uri către celelalte pdb-uri');
+    await runSQLScript(sequelizeARHIVA, './scripts/arhiva-add-links.sql', 'ARHIVA adaugare link-uri către celelalte pdb-uri');
 
-    await sequelizeNORD.sync({ force: true });
+    await sequelizeNORD.sync({ force: true, timeout: 30000 });
     await addMessageToDatabase("Baza de date NORD sincronizata cu succes!", "I", "Admin");
 
     await insertInitialDataNORD();
 
-    await sequelizeSUD.sync({ force: true });
+    await sequelizeSUD.sync({ force: true, timeout: 30000 });
     await addMessageToDatabase("Baza de date SUD sincronizata cu succes!", "I", "Admin");
 
     await insertInitialDataSUD();
 
-    await sequelizeCENTRAL.sync({ force: true });
+    await sequelizeCENTRAL.sync({ force: true, timeout: 30000 });
     await addMessageToDatabase("Baza de date CENTRAL sincronizata cu succes!", "I", "Admin");
 
     await insertInitialDataCENTRAL();
@@ -175,7 +180,9 @@ async function syncDatabases() {
 
     await runSQLScript(sequelizeOLTP, './scripts/backend-ex4.sql', 'Executare script Backend Ex.4');
 
-    await runSQLScript(sequelizeOLTP, './scripts/backend-ex5-oltp-sync.sql', 'Executare script Backend Ex.5');
+    await runSQLScript(sequelizeOLTP, './scripts/backend-ex5-oltp-sync.sql', 'Executare script Backend Ex.5 OLTP');
+    await runSQLScript(sequelizeARHIVA, './scripts/backend-ex5-arhiva-sync.sql', 'Executare script Backend Ex.5 ARHIVA');
+    await runSQLScript(sequelizeCENTRAL, './scripts/backend-ex5-central-sync.sql', 'Executare script Backend Ex.5 CENTRAL');
 
     await runSQLScript(sequelizeOLTP, './scripts/backend-ex6-oltp.sql', 'Executare script Ex.6 aplicare constrângeri OLTP');
     await runSQLScript(sequelizeARHIVA, './scripts/backend-ex6-arhiva.sql', 'Executare script Ex.6 aplicare constrângeri ARHIVA');
