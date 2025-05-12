@@ -53,46 +53,46 @@ BEGIN
 
             PROCEDURE disable_all_triggers IS
             BEGIN
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_angajat_central DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_cursa_central DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_detalii_cursa_central DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_locatii_central DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_angajat_sud DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_cursa_sud DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_detalii_cursa_sud DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_locatii_sud DISABLE'';
 
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_angajat_central DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_angajat_identity DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_client_identity DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_cursa_central DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_detalii_cursa_central DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_locatii_central DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_angajat_sud DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_angajat_contact DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_client_contact DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_cursa_sud DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_detalii_cursa_sud DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_locatii_sud DISABLE'';
 
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_angajat_central DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_angajat_identity DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_client_identity DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_cursa_central DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_detalii_cursa_central DISABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_locatii_central DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_angajat_sud DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_angajat_contact DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_client_contact DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_cursa_sud DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_detalii_cursa_sud DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_locatii_sud DISABLE'';
             END;
 
             PROCEDURE enable_all_triggers IS
             BEGIN
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_angajat_central ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_cursa_central ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_detalii_cursa_central ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_locatii_central ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_angajat_sud ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_cursa_sud ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_detalii_cursa_sud ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_ins_locatii_sud ENABLE'';
 
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_angajat_central ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_angajat_identity ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_client_identity ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_cursa_central ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_detalii_cursa_central ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_locatii_central ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_angajat_sud ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_angajat_contact ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_client_contact ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_cursa_sud ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_detalii_cursa_sud ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_locatii_sud ENABLE'';
 
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_angajat_central ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_angajat_identity ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_client_identity ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_cursa_central ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_detalii_cursa_central ENABLE'';
-                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_locatii_central ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_angajat_sud ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_angajat_contact ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_client_contact ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_cursa_sud ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_detalii_cursa_sud ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_locatii_sud ENABLE'';
             END;
         END;
     ';
@@ -110,12 +110,12 @@ BEGIN
         END;
     ';
 
-    -- Triggeri sync ANGAJAT_IDENTITY
+    -- Triggeri sync ANGAJAT_CONTACT
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU UPDATE ANGAJAT_IDENTITY
-        CREATE OR REPLACE TRIGGER trg_upd_angajat_identity
-        AFTER UPDATE ON ANGAJAT_IDENTITY
+        -- TRIGGER PENTRU UPDATE ANGAJAT_CONTACT
+        CREATE OR REPLACE TRIGGER trg_upd_angajat_contact
+        AFTER UPDATE ON ANGAJAT_CONTACT
         FOR EACH ROW
         DECLARE
             v_payload CLOB;
@@ -124,18 +124,18 @@ BEGIN
                 RETURN;
             END IF;
 
-            v_payload := ''{ "nume": "'' || :NEW.nume ||
-                            ''", "prenume": "'' || :NEW.prenume || ''" }'';
+            v_payload := ''{ "nr_telefon": "'' || :NEW.nr_telefon ||
+                            ''", "tip_angajat": "'' || :NEW.tip_angajat || ''" }'';
 
             INSERT INTO SYNC_JOBS (entitate, cod, operatie, payload)
-            VALUES (''ANGAJAT_IDENTITY'', :NEW.cod_angajat, ''UPDATE'', v_payload);
+            VALUES (''ANGAJAT_CONTACT'', :NEW.cod_angajat, ''UPDATE'', v_payload);
         END;
     ';
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU DELETE ANGAJAT_IDENTITY
-        CREATE OR REPLACE TRIGGER trg_del_angajat_identity
-        AFTER DELETE ON ANGAJAT_IDENTITY
+        -- TRIGGER PENTRU DELETE ANGAJAT_CONTACT
+        CREATE OR REPLACE TRIGGER trg_del_angajat_contact
+        AFTER DELETE ON ANGAJAT_CONTACT
         FOR EACH ROW
         BEGIN
             IF pkg_sync_ctx.is_sync THEN
@@ -143,42 +143,16 @@ BEGIN
             END IF;
 
             INSERT INTO SYNC_JOBS (entitate, cod, operatie, payload)
-            VALUES (''ANGAJAT_IDENTITY'', :OLD.cod_angajat, ''DELETE'', NULL);
+            VALUES (''ANGAJAT_CONTACT'', :OLD.cod_angajat, ''DELETE'', NULL);
         END;
     ';
 
-    -- Triggeri sync ANGAJAT_CENTRAL
+    -- Triggeri sync ANGAJAT_SUD
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU INSERT ANGAJAT_CENTRAL
-        CREATE OR REPLACE TRIGGER trg_ins_angajat_central
-        AFTER INSERT ON ANGAJAT_CENTRAL
-        FOR EACH ROW
-        DECLARE
-            v_payload CLOB;
-        BEGIN
-            IF pkg_sync_ctx.is_sync THEN
-                RETURN;
-            END IF;
-
-            v_payload := ''{ "nume": "'' || :NEW.nume ||
-                            ''", "prenume": "'' || :NEW.prenume ||
-                            ''", "nr_telefon": "'' || :NEW.nr_telefon ||
-                            ''", "tip_angajat": "'' || :NEW.tip_angajat ||
-                            ''", "data_nastere": "'' || TO_CHAR(:NEW.data_nastere, ''YYYY-MM-DD'') ||
-                            ''", "data_angajare": "'' || TO_CHAR(:NEW.data_angajare, ''YYYY-MM-DD'') ||
-                            ''", "salariu": "'' || :NEW.salariu ||
-                            ''", "cod_masina": "'' || :NEW.cod_masina || ''" }'';
-
-            INSERT INTO SYNC_JOBS (entitate, cod, operatie, payload)
-            VALUES (''ANGAJAT_CENTRAL'', :NEW.cod_angajat, ''INSERT'', v_payload);
-        END;
-    ';
-
-    EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU UPDATE ANGAJAT_CENTRAL
-        CREATE OR REPLACE TRIGGER trg_upd_angajat_central
-        AFTER UPDATE ON ANGAJAT_CENTRAL
+        -- TRIGGER PENTRU INSERT ANGAJAT_SUD
+        CREATE OR REPLACE TRIGGER trg_ins_angajat_sud
+        AFTER INSERT ON ANGAJAT_SUD
         FOR EACH ROW
         DECLARE
             v_payload CLOB;
@@ -197,31 +171,14 @@ BEGIN
                             ''", "cod_masina": "'' || :NEW.cod_masina || ''" }'';
 
             INSERT INTO SYNC_JOBS (entitate, cod, operatie, payload)
-            VALUES (''ANGAJAT_CENTRAL'', :NEW.cod_angajat, ''UPDATE'', v_payload);
+            VALUES (''ANGAJAT_SUD'', :NEW.cod_angajat, ''INSERT'', v_payload);
         END;
     ';
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU DELETE ANGAJAT_CENTRAL
-        CREATE OR REPLACE TRIGGER trg_del_angajat_central
-        AFTER DELETE ON ANGAJAT_CENTRAL
-        FOR EACH ROW
-        BEGIN
-            IF pkg_sync_ctx.is_sync THEN
-                RETURN;
-            END IF;
-
-            INSERT INTO SYNC_JOBS (entitate, cod, operatie, payload)
-            VALUES (''ANGAJAT_CENTRAL'', :OLD.cod_angajat, ''DELETE'', NULL);
-        END;
-    ';
-
-    -- Triggeri sync CLIENT_IDENTITY
-
-    EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU UPDATE CLIENT_IDENTITY
-        CREATE OR REPLACE TRIGGER trg_upd_client_identity
-        AFTER UPDATE ON CLIENT_IDENTITY
+        -- TRIGGER PENTRU UPDATE ANGAJAT_SUD
+        CREATE OR REPLACE TRIGGER trg_upd_angajat_sud
+        AFTER UPDATE ON ANGAJAT_SUD
         FOR EACH ROW
         DECLARE
             v_payload CLOB;
@@ -231,7 +188,50 @@ BEGIN
             END IF;
 
             v_payload := ''{ "nume": "'' || :NEW.nume ||
-                            ''", "prenume": "'' || :NEW.prenume || ''" }'';
+                            ''", "prenume": "'' || :NEW.prenume ||
+                            ''", "nr_telefon": "'' || :NEW.nr_telefon ||
+                            ''", "tip_angajat": "'' || :NEW.tip_angajat ||
+                            ''", "data_nastere": "'' || TO_CHAR(:NEW.data_nastere, ''YYYY-MM-DD'') ||
+                            ''", "data_angajare": "'' || TO_CHAR(:NEW.data_angajare, ''YYYY-MM-DD'') ||
+                            ''", "salariu": "'' || :NEW.salariu ||
+                            ''", "cod_masina": "'' || :NEW.cod_masina || ''" }'';
+
+            INSERT INTO SYNC_JOBS (entitate, cod, operatie, payload)
+            VALUES (''ANGAJAT_SUD'', :NEW.cod_angajat, ''UPDATE'', v_payload);
+        END;
+    ';
+
+    EXECUTE IMMEDIATE '
+        -- TRIGGER PENTRU DELETE ANGAJAT_SUD
+        CREATE OR REPLACE TRIGGER trg_del_angajat_sud
+        AFTER DELETE ON ANGAJAT_SUD
+        FOR EACH ROW
+        BEGIN
+            IF pkg_sync_ctx.is_sync THEN
+                RETURN;
+            END IF;
+
+            INSERT INTO SYNC_JOBS (entitate, cod, operatie, payload)
+            VALUES (''ANGAJAT_SUD'', :OLD.cod_angajat, ''DELETE'', NULL);
+        END;
+    ';
+
+    -- Triggeri sync CLIENT_CONTACT
+
+    EXECUTE IMMEDIATE '
+        -- TRIGGER PENTRU UPDATE CLIENT_CONTACT
+        CREATE OR REPLACE TRIGGER trg_upd_client_contact
+        AFTER UPDATE ON CLIENT_CONTACT
+        FOR EACH ROW
+        DECLARE
+            v_payload CLOB;
+        BEGIN
+            IF pkg_sync_ctx.is_sync THEN
+                RETURN;
+            END IF;
+
+            v_payload := ''{ "nr_telefon": "'' || :NEW.nr_telefon ||
+                            ''", "apelativ": "'' || :NEW.apelativ || ''" }'';
 
             INSERT INTO SYNC_JOBS (entitate, cod, operatie, payload)
             VALUES (''CLIENT'', :NEW.cod_client, ''UPDATE'', v_payload);
@@ -239,9 +239,9 @@ BEGIN
     ';
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU DELETE CLIENT_IDENTITY
-        CREATE OR REPLACE TRIGGER trg_del_client_identity
-        AFTER DELETE ON CLIENT_IDENTITY
+        -- TRIGGER PENTRU DELETE CLIENT_CONTACT
+        CREATE OR REPLACE TRIGGER trg_del_client_contact
+        AFTER DELETE ON CLIENT_CONTACT
         FOR EACH ROW
         BEGIN
             IF pkg_sync_ctx.is_sync THEN
@@ -253,12 +253,12 @@ BEGIN
         END;
     ';
 
-    -- Triggeri sync CURSA_CENTRAL
+    -- Triggeri sync CURSA_SUD
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU INSERT CURSA_CENTRAL
-        CREATE OR REPLACE TRIGGER trg_ins_cursa_central
-        AFTER INSERT ON CURSA_CENTRAL
+        -- TRIGGER PENTRU INSERT CURSA_SUD
+        CREATE OR REPLACE TRIGGER trg_ins_cursa_sud
+        AFTER INSERT ON CURSA_SUD
         FOR EACH ROW
         DECLARE
             v_payload CLOB;
@@ -280,9 +280,9 @@ BEGIN
     ';
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU UPDATE CURSA_CENTRAL
-        CREATE OR REPLACE TRIGGER trg_upd_cursa_central
-        AFTER UPDATE ON CURSA_CENTRAL
+        -- TRIGGER PENTRU UPDATE CURSA_SUD
+        CREATE OR REPLACE TRIGGER trg_upd_cursa_sud
+        AFTER UPDATE ON CURSA_SUD
         FOR EACH ROW
         DECLARE
             v_payload CLOB;
@@ -304,9 +304,9 @@ BEGIN
     ';
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU DELETE CURSA_CENTRAL
-        CREATE OR REPLACE TRIGGER trg_del_cursa_central
-        AFTER DELETE ON CURSA_CENTRAL
+        -- TRIGGER PENTRU DELETE CURSA_SUD
+        CREATE OR REPLACE TRIGGER trg_del_cursa_sud
+        AFTER DELETE ON CURSA_SUD
         FOR EACH ROW
         BEGIN
             IF pkg_sync_ctx.is_sync THEN
@@ -318,12 +318,12 @@ BEGIN
         END;
     ';
 
-    -- Triggeri sync DETALII_CURSA_CENTRAL
+    -- Triggeri sync DETALII_CURSA_SUD
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU INSERT DETALII_CURSA_CENTRAL
-        CREATE OR REPLACE TRIGGER trg_ins_detalii_cursa_central
-        AFTER INSERT ON DETALII_CURSA_CENTRAL
+        -- TRIGGER PENTRU INSERT DETALII_CURSA_SUD
+        CREATE OR REPLACE TRIGGER trg_ins_detalii_cursa_sud
+        AFTER INSERT ON DETALII_CURSA_SUD
         FOR EACH ROW
         DECLARE
             v_payload CLOB;
@@ -342,9 +342,9 @@ BEGIN
     ';
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU UPDATE DETALII_CURSA_CENTRAL
-        CREATE OR REPLACE TRIGGER trg_upd_detalii_cursa_central
-        AFTER UPDATE ON DETALII_CURSA_CENTRAL
+        -- TRIGGER PENTRU UPDATE DETALII_CURSA_SUD
+        CREATE OR REPLACE TRIGGER trg_upd_detalii_cursa_sud
+        AFTER UPDATE ON DETALII_CURSA_SUD
         FOR EACH ROW
         DECLARE
             v_payload CLOB;
@@ -363,9 +363,9 @@ BEGIN
     ';
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU DELETE DETALII_CURSA_CENTRAL
-        CREATE OR REPLACE TRIGGER trg_del_detalii_cursa_central
-        AFTER DELETE ON DETALII_CURSA_CENTRAL
+        -- TRIGGER PENTRU DELETE DETALII_CURSA_SUD
+        CREATE OR REPLACE TRIGGER trg_del_detalii_cursa_sud
+        AFTER DELETE ON DETALII_CURSA_SUD
         FOR EACH ROW
         BEGIN
             IF pkg_sync_ctx.is_sync THEN
@@ -377,12 +377,12 @@ BEGIN
         END;
     ';
 
-    -- Triggeri sync LOCATII_CENTRAL
+    -- Triggeri sync LOCATII_SUD
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU INSERT LOCATII_CENTRAL
-        CREATE OR REPLACE TRIGGER trg_ins_locatii_central
-        AFTER INSERT ON LOCATII_CENTRAL
+        -- TRIGGER PENTRU INSERT LOCATII_SUD
+        CREATE OR REPLACE TRIGGER trg_ins_locatii_sud
+        AFTER INSERT ON LOCATII_SUD
         FOR EACH ROW
         DECLARE
             v_payload CLOB;
@@ -400,9 +400,9 @@ BEGIN
     ';
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU UPDATE LOCATII_CENTRAL
-        CREATE OR REPLACE TRIGGER trg_upd_locatii_central
-        AFTER UPDATE ON LOCATII_CENTRAL
+        -- TRIGGER PENTRU UPDATE LOCATII_SUD
+        CREATE OR REPLACE TRIGGER trg_upd_locatii_sud
+        AFTER UPDATE ON LOCATII_SUD
         FOR EACH ROW
         DECLARE
             v_payload CLOB;
@@ -420,9 +420,9 @@ BEGIN
     ';
 
     EXECUTE IMMEDIATE '
-        -- TRIGGER PENTRU DELETE LOCATII_CENTRAL
-        CREATE OR REPLACE TRIGGER trg_del_locatii_central
-        AFTER DELETE ON LOCATII_CENTRAL
+        -- TRIGGER PENTRU DELETE LOCATII_SUD
+        CREATE OR REPLACE TRIGGER trg_del_locatii_sud
+        AFTER DELETE ON LOCATII_SUD
         FOR EACH ROW
         BEGIN
             IF pkg_sync_ctx.is_sync THEN
@@ -449,6 +449,7 @@ BEGIN
             v_prenume VARCHAR2(100);
             v_nr_telefon VARCHAR2(20);
             v_tip_angajat VARCHAR2(30);
+            v_apelativ VARCHAR2(10);
             v_data_nastere DATE;
             v_data_angajare DATE;
             v_data_cursa DATE;
@@ -471,45 +472,45 @@ BEGIN
 
             pkg_sync_ctx.start_sync;
 
-            pkg_sync_ctx.set_initiator@OLTP_LINK(''CENTRAL'');
+            pkg_sync_ctx.set_initiator@OLTP_LINK(''SUD'');
 
             BEGIN
                 pkg_sync_ctx.disable_all_triggers;
                 pkg_sync_ctx.disable_all_triggers@ARHIVA_LINK;
+                pkg_sync_ctx.disable_all_triggers@CENTRAL_LINK;
                 pkg_sync_ctx.disable_all_triggers@NORD_LINK;
-                pkg_sync_ctx.disable_all_triggers@SUD_LINK;
             END;
 
             FOR job_rec IN (SELECT * FROM SYNC_JOBS ORDER BY created_at) LOOP
-                IF job_rec.entitate = ''ANGAJAT_IDENTITY'' THEN
+                IF job_rec.entitate = ''ANGAJAT_CONTACT'' THEN
 
                     IF job_rec.operatie = ''UPDATE'' THEN
                         
-                        v_nume := JSON_VALUE(job_rec.payload, ''$.nume'');
-                        v_prenume := JSON_VALUE(job_rec.payload, ''$.prenume'');
+                        v_nr_telefon := JSON_VALUE(job_rec.payload, ''$.nr_telefon'');
+                        v_tip_angajat := JSON_VALUE(job_rec.payload, ''$.tip_angajat'');
 
                         EXECUTE IMMEDIATE q''[
                             UPDATE ANGAJAT@OLTP_LINK
-                            SET nume = :1,
-                                prenume = :2
+                            SET nr_telefon = :1,
+                                tip_angajat = :2
                             WHERE cod_angajat = :3
-                        ]'' USING v_nume, v_prenume, job_rec.cod;
+                        ]'' USING v_nr_telefon, v_tip_angajat, job_rec.cod;
 
                         EXECUTE IMMEDIATE q''[
-                            UPDATE ANGAJAT_CENTRAL
-                            SET nume = :1,
-                                prenume = :2
+                            UPDATE ANGAJAT_SUD
+                            SET nr_telefon = :1,
+                                tip_angajat = :2
                             WHERE cod_angajat = :3
-                        ]'' USING v_nume, v_prenume, job_rec.cod;
+                        ]'' USING v_nr_telefon, v_tip_angajat, job_rec.cod;
 
                     ELSIF job_rec.operatie = ''DELETE'' THEN
                         
                         EXECUTE IMMEDIATE ''DELETE FROM ANGAJAT@OLTP_LINK WHERE cod_angajat = :1'' USING job_rec.cod;
-                        EXECUTE IMMEDIATE ''DELETE FROM ANGAJAT_CENTRAL WHERE cod_angajat = :1'' USING job_rec.cod;
+                        EXECUTE IMMEDIATE ''DELETE FROM ANGAJAT_SUD WHERE cod_angajat = :1'' USING job_rec.cod;
                     
                     END IF;
                 
-                ELSIF job_rec.entitate = ''ANGAJAT_CENTRAL'' THEN
+                ELSIF job_rec.entitate = ''ANGAJAT_SUD'' THEN
 
                     v_nume := JSON_VALUE(job_rec.payload, ''$.nume'');
                     v_prenume := JSON_VALUE(job_rec.payload, ''$.prenume'');
@@ -529,10 +530,10 @@ BEGIN
                         ]'' USING job_rec.cod, v_nume, v_prenume, v_nr_telefon, v_tip_angajat, v_data_nastere, v_data_angajare, v_salariu, v_cod_masina;
                         
                         EXECUTE IMMEDIATE q''[
-                            INSERT INTO ANGAJAT_IDENTITY
-                            (cod_angajat, nume, prenume)
+                            INSERT INTO ANGAJAT_CONTACT
+                            (cod_angajat, nr_telefon, tip_angajat)
                             VALUES (:1, :2, :3)
-                        ]'' USING job_rec.cod, v_nume, v_prenume;
+                        ]'' USING job_rec.cod, v_nr_telefon, v_tip_angajat;
 
                     ELSIF job_rec.operatie = ''UPDATE'' THEN
 
@@ -550,31 +551,31 @@ BEGIN
                         ]'' USING v_nume, v_prenume, v_nr_telefon, v_tip_angajat, v_data_nastere, v_data_angajare, v_salariu, v_cod_masina, job_rec.cod;
 
                         EXECUTE IMMEDIATE q''[
-                            UPDATE ANGAJAT_IDENTITY
-                            SET nume = :1,
-                                prenume = :2
+                            UPDATE ANGAJAT_CONTACT
+                            SET nr_telefon = :1,
+                                tip_angajat = :2
                             WHERE cod_angajat = :3
-                        ]'' USING v_nume, v_prenume, job_rec.cod;
+                        ]'' USING v_nr_telefon, v_tip_angajat, job_rec.cod;
 
                     ELSIF job_rec.operatie = ''DELETE'' THEN
                         
                         EXECUTE IMMEDIATE ''DELETE FROM ANGAJAT@OLTP_LINK WHERE cod_angajat = :1'' USING job_rec.cod;
-                        EXECUTE IMMEDIATE ''DELETE FROM ANGAJAT_IDENTITY WHERE cod_angajat = :1'' USING job_rec.cod;
+                        EXECUTE IMMEDIATE ''DELETE FROM ANGAJAT_CONTACT WHERE cod_angajat = :1'' USING job_rec.cod;
                     
                     END IF;
 
                 ELSIF job_rec.entitate = ''CLIENT'' THEN
                     IF job_rec.operatie = ''UPDATE'' THEN
 
-                        v_nume := JSON_VALUE(job_rec.payload, ''$.nume'');
-                        v_prenume := JSON_VALUE(job_rec.payload, ''$.prenume'');
+                        v_nr_telefon := JSON_VALUE(job_rec.payload, ''$.nr_telefon'');
+                        v_apelativ := JSON_VALUE(job_rec.payload, ''$.apelativ'');
 
                         EXECUTE IMMEDIATE q''[
                             UPDATE CLIENT@OLTP_LINK
-                            SET nume = :1,
-                                prenume = :2
+                            SET nr_telefon = :1,
+                                apelativ = :2
                             WHERE cod_client = :3
-                        ]'' USING v_nume, v_prenume, job_rec.cod;
+                        ]'' USING v_nr_telefon, v_apelativ, job_rec.cod;
 
                     ELSIF job_rec.operatie = ''DELETE'' THEN
 
@@ -674,7 +675,7 @@ BEGIN
                     
                     END IF;
                 END IF;
-                
+
             END LOOP;
 
             DELETE FROM SYNC_JOBS;
@@ -686,8 +687,8 @@ BEGIN
             BEGIN
                 pkg_sync_ctx.enable_all_triggers;
                 pkg_sync_ctx.enable_all_triggers@ARHIVA_LINK;
+                pkg_sync_ctx.enable_all_triggers@CENTRAL_LINK;
                 pkg_sync_ctx.enable_all_triggers@NORD_LINK;
-                pkg_sync_ctx.enable_all_triggers@SUD_LINK;
             END;
         END;
     ';

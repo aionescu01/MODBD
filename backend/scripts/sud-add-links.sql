@@ -23,5 +23,25 @@ BEGIN
         EXECUTE IMMEDIATE 'CREATE DATABASE LINK central_link CONNECT TO admin IDENTIFIED BY admin USING ''central''';
     END IF;
 
+    -- Verifică dacă link-ul 'arhiva_link' există deja
+    SELECT COUNT(*) INTO link_exists
+    FROM all_db_links
+    WHERE db_link = 'ARHIVA_LINK';
+
+    IF link_exists = 0 THEN
+        -- Creează link-ul 'arhiva_link' dacă nu există
+        EXECUTE IMMEDIATE 'CREATE DATABASE LINK arhiva_link CONNECT TO admin IDENTIFIED BY admin USING ''arhiva''';
+    END IF;
+
+    -- Verifică dacă link-ul 'oltp_link' există deja
+    SELECT COUNT(*) INTO link_exists
+    FROM all_db_links
+    WHERE db_link = 'OLTP_LINK';
+
+    IF link_exists = 0 THEN
+        -- Creează link-ul 'oltp_link' dacă nu există
+        EXECUTE IMMEDIATE 'CREATE DATABASE LINK oltp_link CONNECT TO admin IDENTIFIED BY admin USING ''oltp''';
+    END IF;
+
     COMMIT;
 END;

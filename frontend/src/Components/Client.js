@@ -164,7 +164,13 @@ const ClientManagement = () => {
                   <TableCell>{client.prenume}</TableCell>
                   <TableCell>{client.nr_telefon}</TableCell>
                   <TableCell>{client.apelativ}</TableCell>
-                  <TableCell>{new Date(client.data_nastere).toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    {new Intl.DateTimeFormat('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                    }).format(new Date(client.data_nastere))}
+                  </TableCell>
                   <TableCell>{Math.round(parseFloat(client.nota) * 10) / 10}</TableCell>
                   <TableCell>
                     <Stack direction="row" spacing={1}>

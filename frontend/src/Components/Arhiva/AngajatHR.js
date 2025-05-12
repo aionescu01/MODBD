@@ -149,8 +149,20 @@ const AngajatHRManagement = () => {
             <TableBody>
               {employees.map((employee) => (
                 <TableRow key={employee.cod_angajat}>
-                  <TableCell>{new Date(employee.data_nastere).toLocaleDateString()}</TableCell>
-                  <TableCell>{new Date(employee.data_angajare).toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    {new Intl.DateTimeFormat('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                    }).format(new Date(employee.data_nastere))}
+                  </TableCell>
+                  <TableCell>
+                    {new Intl.DateTimeFormat('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                    }).format(new Date(employee.data_angajare))}
+                  </TableCell>
                   <TableCell>{employee.salariu}</TableCell>
                   <TableCell>{employee.cod_masina}</TableCell>
                   <TableCell>

@@ -134,10 +134,10 @@ async function runSQLScript(sequelize, filePath, message) {
 
 async function syncDatabases() {
   try {
-    await sequelizeARHIVA.sync({ force: true, timeout: 30000 });
+    await sequelizeARHIVA.sync({ force: true });
     await addMessageToDatabase("Baza de date ARHIVA sincronizata cu succes!", "I", "Admin");
 
-    await sequelizeOLTP.sync({ force: true, timeout: 30000 });
+    await sequelizeOLTP.sync({ force: true });
     await addMessageToDatabase("Baza de date OLTP sincronizata cu succes!", "I", "Admin");
 
     await runSQLScript(sequelizeOLTP, './scripts/add-users.sql', 'Adaugare utilizatori in OLTP');
@@ -157,17 +157,17 @@ async function syncDatabases() {
     await runSQLScript(sequelizeCENTRAL, './scripts/central-add-links.sql', 'CENTRAL adaugare link-uri către celelalte pdb-uri');
     await runSQLScript(sequelizeARHIVA, './scripts/arhiva-add-links.sql', 'ARHIVA adaugare link-uri către celelalte pdb-uri');
 
-    await sequelizeNORD.sync({ force: true, timeout: 30000 });
+    await sequelizeNORD.sync({ force: true });
     await addMessageToDatabase("Baza de date NORD sincronizata cu succes!", "I", "Admin");
 
     await insertInitialDataNORD();
 
-    await sequelizeSUD.sync({ force: true, timeout: 30000 });
+    await sequelizeSUD.sync({ force: true });
     await addMessageToDatabase("Baza de date SUD sincronizata cu succes!", "I", "Admin");
 
     await insertInitialDataSUD();
 
-    await sequelizeCENTRAL.sync({ force: true, timeout: 30000 });
+    await sequelizeCENTRAL.sync({ force: true });
     await addMessageToDatabase("Baza de date CENTRAL sincronizata cu succes!", "I", "Admin");
 
     await insertInitialDataCENTRAL();
@@ -183,14 +183,16 @@ async function syncDatabases() {
     await runSQLScript(sequelizeOLTP, './scripts/backend-ex5-oltp-sync.sql', 'Executare script Backend Ex.5 OLTP');
     await runSQLScript(sequelizeARHIVA, './scripts/backend-ex5-arhiva-sync.sql', 'Executare script Backend Ex.5 ARHIVA');
     await runSQLScript(sequelizeCENTRAL, './scripts/backend-ex5-central-sync.sql', 'Executare script Backend Ex.5 CENTRAL');
+    await runSQLScript(sequelizeNORD, './scripts/backend-ex5-nord-sync.sql', 'Executare script Backend Ex.5 NORD');
+    await runSQLScript(sequelizeSUD, './scripts/backend-ex5-sud-sync.sql', 'Executare script Backend Ex.5 SUD');
 
-    await runSQLScript(sequelizeOLTP, './scripts/backend-ex6-oltp.sql', 'Executare script Ex.6 aplicare constrângeri OLTP');
-    await runSQLScript(sequelizeARHIVA, './scripts/backend-ex6-arhiva.sql', 'Executare script Ex.6 aplicare constrângeri ARHIVA');
-    await runSQLScript(sequelizeNORD, './scripts/backend-ex6-nord.sql', 'Executare script Ex.6 aplicare constrângeri NORD');
-    await runSQLScript(sequelizeCENTRAL, './scripts/backend-ex6-central.sql', 'Executare script Ex.6 aplicare constrângeri CENTRAL');
-    await runSQLScript(sequelizeSUD, './scripts/backend-ex6-sud.sql', 'Executare script Ex.6 aplicare constrângeri SUD');
+    await runSQLScript(sequelizeOLTP, './scripts/backend-ex6-oltp.sql', 'Executare script Backend Ex.6 aplicare constrângeri OLTP');
+    await runSQLScript(sequelizeARHIVA, './scripts/backend-ex6-arhiva.sql', 'Executare script Backend Ex.6 aplicare constrângeri ARHIVA');
+    await runSQLScript(sequelizeNORD, './scripts/backend-ex6-nord.sql', 'Executare script Backend Ex.6 aplicare constrângeri NORD');
+    await runSQLScript(sequelizeCENTRAL, './scripts/backend-ex6-central.sql', 'Executare script Backend Ex.6 aplicare constrângeri CENTRAL');
+    await runSQLScript(sequelizeSUD, './scripts/backend-ex6-sud.sql', 'Executare script Backend Ex.6 aplicare constrângeri SUD');
 
-    await runSQLScript(sequelizeOLTP, './scripts/backend-ex7.sql', 'Executare script Ex.7 Optimizarea cererii SQL propusă în raportul de analiză');
+    await runSQLScript(sequelizeOLTP, './scripts/backend-ex7.sql', 'Executare script Backend Ex.7 Optimizarea cererii SQL propusă în raportul de analiză');
 
     app.listen(PORT, () =>
       console.log(`DB ruleaza pe portul ${PORT}`)

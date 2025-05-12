@@ -28,6 +28,9 @@ BEGIN
             PROCEDURE start_sync;
             PROCEDURE end_sync;
             FUNCTION is_sync RETURN BOOLEAN;
+
+            PROCEDURE disable_all_triggers;
+            PROCEDURE enable_all_triggers;
         END;
     ';
 
@@ -47,11 +50,38 @@ BEGIN
             BEGIN
                 RETURN SYS_CONTEXT(''sync_ctx'', ''is_sync'') = ''1'';
             END;
+
+            PROCEDURE disable_all_triggers IS
+            BEGIN
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_angajat DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_client DISABLE'';
+                
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_angajat DISABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_client DISABLE'';
+            END;
+
+            PROCEDURE enable_all_triggers IS
+            BEGIN
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_angajat ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_upd_client ENABLE'';
+
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_angajat ENABLE'';
+                EXECUTE IMMEDIATE ''ALTER TRIGGER trg_del_client ENABLE'';
+            END;
         END;
     ';
 
     EXECUTE IMMEDIATE '
-        CREATE CONTEXT sync_ctx USING pkg_sync_ctx
+        BEGIN
+            EXECUTE IMMEDIATE ''CREATE CONTEXT sync_ctx USING pkg_sync_ctx'';
+        EXCEPTION
+            WHEN OTHERS THEN
+                IF SQLCODE = -955 THEN
+                    NULL;
+                ELSE
+                    RAISE;
+                END IF;
+        END;
     ';
 
     -- Triggeri sync ANGAJAT_HR
@@ -147,11 +177,25 @@ BEGIN
             v_cod_masina VARCHAR2(100);
             v_nota NUMBER;
         BEGIN
+            IF pkg_sync_ctx.is_sync THEN
+                RETURN;
+            END IF;
+
             pkg_sync_ctx.start_sync;
+
+            pkg_sync_ctx.set_initiator@OLTP_LINK(''ARHIVA'');
+
+            BEGIN
+                pkg_sync_ctx.disable_all_triggers;
+                pkg_sync_ctx.disable_all_triggers@CENTRAL_LINK;
+                pkg_sync_ctx.disable_all_triggers@NORD_LINK;
+                pkg_sync_ctx.disable_all_triggers@SUD_LINK;
+            END;
 
             FOR job_rec IN (SELECT * FROM SYNC_JOBS ORDER BY created_at) LOOP
                 IF job_rec.entitate = ''ANGAJAT'' THEN
                     IF job_rec.operatie = ''UPDATE'' THEN
+
                         v_data_nastere := TO_DATE(JSON_VALUE(job_rec.payload, ''$.data_nastere''), ''YYYY-MM-DD'');
                         v_data_angajare := TO_DATE(JSON_VALUE(job_rec.payload, ''$.data_angajare''), ''YYYY-MM-DD'');
                         v_salariu := TO_NUMBER(JSON_VALUE(job_rec.payload, ''$.salariu''));
@@ -166,42 +210,15 @@ BEGIN
                             WHERE cod_angajat = :5
                         ]'' USING v_data_nastere, v_data_angajare, v_salariu, v_cod_masina, job_rec.cod;
 
-                        EXECUTE IMMEDIATE q''[
-                            UPDATE ANGAJAT_NORD@NORD_LINK
-                            SET data_nastere = :1,
-                                data_angajare = :2,
-                                salariu = :3,
-                                cod_masina = :4
-                            WHERE cod_angajat = :5
-                        ]'' USING v_data_nastere, v_data_angajare, v_salariu, v_cod_masina, job_rec.cod;
-
-                        EXECUTE IMMEDIATE q''[
-                            UPDATE ANGAJAT_SUD@SUD_LINK
-                            SET data_nastere = :1,
-                                data_angajare = :2,
-                                salariu = :3,
-                                cod_masina = :4
-                            WHERE cod_angajat = :5
-                        ]'' USING v_data_nastere, v_data_angajare, v_salariu, v_cod_masina, job_rec.cod;
-
-                        EXECUTE IMMEDIATE q''[
-                            UPDATE ANGAJAT_CENTRAL@CENTRAL_LINK
-                            SET data_nastere = :1,
-                                data_angajare = :2,
-                                salariu = :3,
-                                cod_masina = :4
-                            WHERE cod_angajat = :5
-                        ]'' USING v_data_nastere, v_data_angajare, v_salariu, v_cod_masina, job_rec.cod;
-
                     ELSIF job_rec.operatie = ''DELETE'' THEN
+                        
                         EXECUTE IMMEDIATE ''DELETE FROM ANGAJAT@OLTP_LINK WHERE cod_angajat = :1'' USING job_rec.cod;
-                        EXECUTE IMMEDIATE ''DELETE FROM ANGAJAT_NORD@NORD_LINK WHERE cod_angajat = :1'' USING job_rec.cod;
-                        EXECUTE IMMEDIATE ''DELETE FROM ANGAJAT_SUD@SUD_LINK WHERE cod_angajat = :1'' USING job_rec.cod;
-                        EXECUTE IMMEDIATE ''DELETE FROM ANGAJAT_CENTRAL@CENTRAL_LINK WHERE cod_angajat = :1'' USING job_rec.cod;
+                    
                     END IF;
 
                 ELSIF job_rec.entitate = ''CLIENT'' THEN
                     IF job_rec.operatie = ''UPDATE'' THEN
+                        
                         v_data_nastere := TO_DATE(JSON_VALUE(job_rec.payload, ''$.data_nastere''), ''YYYY-MM-DD'');
                         v_nota := TO_NUMBER(JSON_VALUE(job_rec.payload, ''$.nota''));
 
@@ -212,39 +229,27 @@ BEGIN
                             WHERE cod_client = :3
                         ]'' USING v_data_nastere, v_nota, job_rec.cod;
 
-                        EXECUTE IMMEDIATE q''[
-                            UPDATE CLIENT_NORD@NORD_LINK
-                            SET data_nastere = :1,
-                                nota = :2
-                            WHERE cod_client = :3
-                        ]'' USING v_data_nastere, v_nota, job_rec.cod;
-
-                        EXECUTE IMMEDIATE q''[
-                            UPDATE CLIENT_SUD@SUD_LINK
-                            SET data_nastere = :1,
-                                nota = :2
-                            WHERE cod_client = :3
-                        ]'' USING v_data_nastere, v_nota, job_rec.cod;
-
-                        EXECUTE IMMEDIATE q''[
-                            UPDATE CLIENT_CENTRAL@CENTRAL_LINK
-                            SET data_nastere = :1,
-                                nota = :2
-                            WHERE cod_client = :3
-                        ]'' USING v_data_nastere, v_nota, job_rec.cod;
-
                     ELSIF job_rec.operatie = ''DELETE'' THEN
+                        
                         EXECUTE IMMEDIATE ''DELETE FROM CLIENT@OLTP_LINK WHERE cod_client = :1'' USING job_rec.cod;
-                        EXECUTE IMMEDIATE ''DELETE FROM CLIENT_NORD@NORD_LINK WHERE cod_client = :1'' USING job_rec.cod;
-                        EXECUTE IMMEDIATE ''DELETE FROM CLIENT_SUD@SUD_LINK WHERE cod_client = :1'' USING job_rec.cod;
-                        EXECUTE IMMEDIATE ''DELETE FROM CLIENT_CENTRAL@CENTRAL_LINK WHERE cod_client = :1'' USING job_rec.cod;
+                    
                     END IF;
                 END IF;
-
-                DELETE FROM SYNC_JOBS WHERE id = job_rec.id;
+                
             END LOOP;
 
+            DELETE FROM SYNC_JOBS;
+
             pkg_sync_ctx.end_sync;
+
+            pkg_sync_ctx.set_initiator@OLTP_LINK('''');
+
+            BEGIN
+                pkg_sync_ctx.enable_all_triggers;
+                pkg_sync_ctx.enable_all_triggers@CENTRAL_LINK;
+                pkg_sync_ctx.enable_all_triggers@NORD_LINK;
+                pkg_sync_ctx.enable_all_triggers@SUD_LINK;
+            END;
         END;
     ';
 

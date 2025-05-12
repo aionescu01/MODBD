@@ -142,7 +142,13 @@ const ClientProfilManagement = () => {
             <TableBody>
               {clients.map((client) => (
                 <TableRow key={client.cod_client}>
-                  <TableCell>{new Date(client.data_nastere).toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    {new Intl.DateTimeFormat('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                    }).format(new Date(client.data_nastere))}
+                  </TableCell>
                   <TableCell>{Math.round(parseFloat(client.nota) * 10) / 10}</TableCell>
                   <TableCell>
                     <Stack direction="row" spacing={1}>

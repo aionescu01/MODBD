@@ -45,14 +45,15 @@ BEGIN
 
     EXECUTE IMMEDIATE '
         CREATE OR REPLACE PROCEDURE check_global_unique_locatie(
-            p_localitate VARCHAR2
+            p_localitate VARCHAR2,
+            p_cod_locatie NUMBER
         ) IS
             v_count_sud NUMBER := 0;
             v_count_central NUMBER := 0;
         BEGIN
             SELECT COUNT(*) INTO v_count_sud
             FROM LOCATII_SUD@sud_link
-            WHERE localitate = p_localitate;
+            WHERE localitate = p_localitate AND cod_locatie <> p_cod_locatie;
             
             IF v_count_sud > 0 THEN
                 RAISE_APPLICATION_ERROR(-20102, ''Locatia exista deja in SUD'');
@@ -60,7 +61,7 @@ BEGIN
             
             SELECT COUNT(*) INTO v_count_central
             FROM LOCATII_CENTRAL@central_link
-            WHERE localitate = p_localitate;
+            WHERE localitate = p_localitate AND cod_locatie <> p_cod_locatie;
             
             IF v_count_central > 0 THEN
                 RAISE_APPLICATION_ERROR(-20103, ''Locatia exista deja in CENTRAL'');
@@ -75,7 +76,7 @@ BEGIN
             BEFORE INSERT OR UPDATE ON LOCATII_NORD
             FOR EACH ROW
         BEGIN
-            check_global_unique_locatie(:NEW.localitate);
+            check_global_unique_locatie(:NEW.localitate, :NEW.cod_locatie);
         END;
     ';
 

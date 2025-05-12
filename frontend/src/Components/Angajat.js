@@ -171,8 +171,21 @@ const AngajatManagement = () => {
                   <TableCell>{employee.prenume}</TableCell>
                   <TableCell>{employee.nr_telefon}</TableCell>
                   <TableCell>{employee.tip_angajat}</TableCell>
-                  <TableCell>{new Date(employee.data_nastere).toLocaleDateString()}</TableCell>
-                  <TableCell>{new Date(employee.data_angajare).toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    {new Intl.DateTimeFormat('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                    }).format(new Date(employee.data_nastere))}
+                  </TableCell>
+
+                  <TableCell>
+                    {new Intl.DateTimeFormat('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                    }).format(new Date(employee.data_angajare))}
+                  </TableCell>
                   <TableCell>{employee.salariu}</TableCell>
                   <TableCell>{employee.cod_masina}</TableCell>
                   <TableCell>

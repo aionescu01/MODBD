@@ -152,8 +152,21 @@ const MasiniManagement = () => {
               {masini.map((masina) => (
                 <TableRow key={masina.cod_masina}>
                   <TableCell>{masina.numar_masina}</TableCell>
-                  <TableCell>{masina.data_achizitionare}</TableCell>
-                  <TableCell>{masina.data_revizie_urm}</TableCell>
+                  <TableCell>
+                    {new Intl.DateTimeFormat('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                    }).format(new Date(masina.data_achizitionare))}
+                  </TableCell>
+
+                  <TableCell>
+                    {new Intl.DateTimeFormat('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                    }).format(new Date(masina.data_revizie_urm))}
+                  </TableCell>
                   <TableCell>{masina.marca}</TableCell>
                   <TableCell>{masina.model}</TableCell>
                   <TableCell>

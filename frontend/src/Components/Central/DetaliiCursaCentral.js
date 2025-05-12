@@ -92,10 +92,7 @@ const DetaliiCursaCentralManagement = () => {
 
   const handleEdit = (detaliu) => {
     setSelectedDetaliu(detaliu);
-    setFormData({
-      ...detaliu,
-      data_cursa: detaliu.data_cursa.slice(0, 16) // Format datetime-local
-    });
+    setFormData(detaliu);
     setOpenDialog(true);
   };
 
@@ -154,7 +151,11 @@ const DetaliiCursaCentralManagement = () => {
                   <TableRow key={detaliu.id}>
                     <TableCell>{detaliu.cod_cursa}</TableCell>
                     <TableCell>
-                      {new Date(detaliu.data_cursa).toLocaleString()}
+                      {new Intl.DateTimeFormat('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                      }).format(new Date(detaliu.data_cursa))}
                     </TableCell>
                     <TableCell>{detaliu.nota_sofer}</TableCell>
                     <TableCell>{detaliu.nota_client}</TableCell>
@@ -217,8 +218,8 @@ const DetaliiCursaCentralManagement = () => {
                 <TextField
                   label="Data Cursă"
                   name="data_cursa"
-                  type="datetime-local"
-                  value={formData.data_cursa}
+                  type="date"
+                  value={formData.data_cursa ? formData.data_cursa.split('T')[0] : ''}
                   onChange={handleInputChange}
                   fullWidth
                   InputLabelProps={{
