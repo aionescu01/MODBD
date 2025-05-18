@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideBest Management System | Soluția completă pentru companii de taxi și ride-sharing</title>
+    <style>
+        :root {
+            --primary: #000000;
+            --secondary: #8B5A2B;
+            --accent: #654321;
+            --light: #FFF8DC;
+            --dark: #000000;
+            --success: #8B4513;
+            --warning: #B8860B;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #FFF8E7;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 5%;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            color: #8B5A2B;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #8B5A2B;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #8B5A2B;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #654321;
+        }
+        
+        .hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/api/placeholder/1920/1080');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 5%;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .section {
+            padding: 5rem 10%;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #8B5A2B;
+        }
+        
+        .motivatie {
+            background-color: #FFF8DC;
+        }
+        
+        .challenges {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .challenge-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .challenge-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .challenge-card i {
+            font-size: 2.5rem;
+            color: #8B5A2B;
+            margin-bottom: 1rem;
+        }
+        
+        .challenge-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .features {
+            background-color: white;
+        }
+        
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background-color: #FFF8DC;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card i {
+            font-size: 3rem;
+            color: #654321;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .feature-list {
+            list-style-type: none;
+            text-align: left;
+            margin-top: 1.5rem;
+        }
+        
+        .feature-list li {
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #8B4513;
+            font-weight: bold;
+        }
+        
+        .user-stories {
+            background-color: #FFF8DC;
+        }
+        
+        .stories-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .story-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .story-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .story-card h3 i {
+            margin-right: 0.75rem;
+            color: #654321;
+        }
+        
+        .story-card ul {
+            list-style-type: none;
+            margin-top: 1rem;
+        }
+        
+        .story-card ul li {
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .story-card ul li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #8B5A2B;
+        }
+        
+        .swot {
+            background-color: white;
+        }
+        
+        .swot-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+        
+        .swot-card {
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .swot-card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .swot-card h3 i {
+            margin-right: 0.75rem;
+            font-size: 1.75rem;
+        }
+        
+        .swot-card ul {
+            list-style-type: none;
+        }
+        
+        .swot-card ul li {
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .swot-card ul li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        .strengths {
+            background-color: rgba(139, 69, 19, 0.1);
+        }
+        
+        .strengths h3 i {
+            color: var(--success);
+        }
+        
+        .weaknesses {
+            background-color: rgba(139, 69, 19, 0.2);
+        }
+        
+        .weaknesses h3 i {
+            color: var(--secondary);
+        }
+        
+        .opportunities {
+            background-color: rgba(139, 69, 19, 0.1);
+        }
+        
+        .opportunities h3 i {
+            color: var(--accent);
+        }
+        
+        .threats {
+            background-color: rgba(139, 69, 19, 0.2);
+        }
+        
+        .threats h3 i {
+            color: var(--warning);
+        }
+        
+        .cta {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-size: 1.2rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 10%;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer-section h3:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 50px;
+            height: 2px;
+            background-color: #8B5A2B;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #8B5A2B;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: #8B5A2B;
+        }
+        
+        .copyright {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 1rem 5%;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0.5rem;
+            }
+            
+            .hero {
+                height: auto;
+                padding: 4rem 5%;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .section {
+                padding: 3rem 5%;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .swot-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo">
+                <i class="fas fa-taxi logo-icon"></i>
+                Ride<span>Best</span>
+            </a>
+            <ul>
+                <li><a href="#motivatie">Motivație</a></li>
+                <li><a href="#caracteristici">Caracteristici</a></li>
+                <li><a href="#user-stories">User Stories</a></li>
+                <li><a href="#analiza">Analiză SWOT</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>RideBest Management System</h1>
+        <p>Transformăm modul în care companiile de taxi și ride-sharing își gestionează operațiunile, oferind o soluție modernă, scalabilă și personalizabilă.</p>
+        <div class="hero-buttons">
+            <a href="#caracteristici" class="btn">Descoperă Soluția</a>
+            <a href="#contact" class="btn btn-secondary">Contactează-ne</a>
+        </div>
+    </section>
+
+    <section id="motivatie" class="section motivatie">
+        <div class="section-title">
+            <h2>Motivație</h2>
+        </div>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem;">Industria de taxi și ride-sharing din România suferă de lipsa unei soluții tehnologice unificare și scalabile. RideBest vine să rezolve aceste probleme printr-o soluție tehnologică inovatoare.</p>
+        <div class="challenges">
+            <div class="challenge-card">
+                <i class="fas fa-history"></i>
+                <h3>Sisteme vechi și neintegrate</h3>
+                <p>Sistemele actuale nu pot gestiona operațiuni complexe pe multiple județe, limitând expansiunea afacerii.</p>
+            </div>
+            <div class="challenge-card">
+                <i class="fas fa-eye-slash"></i>
+                <h3>Lipsă de transparență</h3>
+                <p>Companiile nu pot monitoriza eficient managementul flotei și performanțele șoferilor.</p>
+            </div>
+            <div class="challenge-card">
+                <i class="fas fa-file-invoice"></i>
+                <h3>Dificultăți în raportare</h3>
+                <p>Raportarea financiară și conformitatea cu ANAF reprezintă provocări majore pentru operatori.</p>
+            </div>
+            <div class="challenge-card">
+                <i class="fas fa-tachometer-alt"></i>
+                <h3>Latență mare</h3>
+                <p>Sistemele centralizate suferă de latență mare pentru operațiunile din regiuni îndepărtate.</p>
+            </div>
+            <div class="challenge-card">
+                <i class="fas fa-user-cog"></i>
+                <h3>Personalizare limitată</h3>
+                <p>Imposibilitatea de a oferi servicii personalizate diferitelor tipuri de clienți afectează satisfacția.</p>
+            </div>
+            <div class="challenge-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Lipsa unei aplicații complexe</h3>
+                <p>Nu există o aplicație care să ajute la managementul complet al flotelor de mașini.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="caracteristici" class="section features">
+        <div class="section-title">
+            <h2>Caracteristici Principale</h2>
+        </div>
+        <div class="features-container">
+            <div class="feature-card">
+                <i class="fas fa-server"></i>
+                <h3>Arhitectură Distribuită Unică</h3>
+                <ul class="feature-list">
+                    <li>4 servere geografice (Nord, Sud, Central, Arhivă)</li>
+                    <li>Fragmentare orizontală și verticală pentru performanță</li>
+                    <li>Sincronizare automată prin triggere</li>
+                    <li>Latență scăzută pentru operațiuni locale</li>
+                    <li>Gestionarea mai multor tipuri de utilizatori</li>
+                    <li>Urmărire live a șoferilor în program</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Aplicații Duale</h3>
+                <ul class="feature-list">
+                    <li>App pentru operatori cu dashboard complet</li>
+                    <li>App pentru clienți (comandă, plăți, rating)</li>
+                    <li>Portal web pentru raportare și analytics</li>
+                    <li>Integrare completă între toate platformele</li>
+                    <li>Sincronizare în timp real a datelor</li>
+                    <li>Notificări și alerte personalizabile</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-tools"></i>
+                <h3>Personalizare Completă</h3>
+                <ul class="feature-list">
+                    <li>Configurabil pentru orice tip de client</li>
+                    <li>Branding personalizat per client</li>
+                    <li>Reguli de business adaptabile</li>
+                    <li>Rapoarte și dashboard configurabile</li>
+                    <li>Automatizări personalizate</li>
+                    <li>API extensibil pentru integrări</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="user-stories" class="section user-stories">
+        <div class="section-title">
+            <h2>User Stories</h2>
+        </div>
+        <div class="stories-container">
+            <div class="story-card">
+                <h3><i class="fas fa-user-tie"></i>Administrator de Flotă</h3>
+                <p>Ca administrator de flotă, vreau să:</p>
+                <ul>
+                    <li>Monitorizez în timp real toate vehiculele din flota mea</li>
+                    <li>Gestionez programele șoferilor și să optimizez rutele</li>
+                    <li>Generez rapoarte financiare automate pentru ANAF</li>
+                    <li>Primesc alerte pentru situații excepționale</li>
+                    <li>Configurez reguli de alocare a curselor</li>
+                </ul>
+            </div>
+            <div class="story-card">
+                <h3><i class="fas fa-car"></i>Șofer</h3>
+                <p>Ca șofer, vreau să:</p>
+                <ul>
+                    <li>Primesc curse automat bazat pe locația mea</li>
+                    <li>Văd istoricul meu de performanțe și rating</li>
+                    <li>Gestionez simplu documentele și plățile</li>
+                    <li>Comunic eficient cu dispeceratul</li>
+                    <li>Primesc alerte despre trafic și situații speciale</li>
+                </ul>
+            </div>
+            <div class="story-card">
+                <h3><i class="fas fa-user"></i>Client</h3>
+                <p>Ca client, vreau să:</p>
+                <ul>
+                    <li>Comand o cursă rapid cu tracking în timp real</li>
+                    <li>Plătesc online sau cash, cu facturare automată</li>
+                    <li>Ofer feedback și să acumulez discounturi</li>
+                    <li>Salvez locații favorite pentru comenzi rapide</li>
+                    <li>Primesc estimări precise de timp și cost</li>
+                </ul>
+            </div>
+            <div class="story-card">
+                <h3><i class="fas fa-building"></i>Owner de Companie</h3>
+                <p>Ca owner de companie, vreau să:</p>
+                <ul>
+                    <li>Văd analytics detaliate despre profitabilitate</li>
+                    <li>Scalizez operațiunile pe noi regiuni ușor</li>
+                    <li>Am conformitate completă cu reglementările locale</li>
+                    <li>Îmbunătățesc continuu serviciile bazat pe feedback</li>
+                    <li>Automatizez procese administrative</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="analiza" class="section swot">
+        <div class="section-title">
+            <h2>Analiza SWOT</h2>
+        </div>
+        <div class="swot-container">
+            <div class="swot-card strengths">
+                <h3><i class="fas fa-thumbs-up"></i>Puncte Forte</h3>
+                <ul>
+                    <li>Arhitectură tehnologică unică cu fragmentare geografică</li>
+                    <li>Echipă cu experiență tehnică solidă în proiect</li>
+                    <li>Flexibilitate completă de personalizare</li>
+                    <li>Performanță superioară prin latență redusă</li>
+                    <li>Logging complet pentru audit și compliance</li>
+                </ul>
+            </div>
+            <div class="swot-card weaknesses">
+                <h3><i class="fas fa-thumbs-down"></i>Puncte Slabe</h3>
+                <ul>
+                    <li>Echipă mică pentru lansare rapidă pe piață</li>
+                    <li>Lipsa unui brand recunoscut în industrie</li>
+                    <li>Necesită investiție inițială semnificativă în infrastructură</li>
+                    <li>Complexitatea sistemului poate îngreuna suportul inițial</li>
+                </ul>
+            </div>
+            <div class="swot-card opportunities">
+                <h3><i class="fas fa-lightbulb"></i>Oportunități</h3>
+                <ul>
+                    <li>Piață românească în creștere pentru soluții tech în transport</li>
+                    <li>Digitalizarea accelerată în toate sectoarele</li>
+                    <li>Reglementări noi care favorizează transparența și monitorizarea</li>
+                    <li>Expansiune în țări din regiune cu nevoi similare</li>
+                    <li>Integrare cu sisteme smart city existente</li>
+                </ul>
+            </div>
+            <div class="swot-card threats">
+                <h3><i class="fas fa-exclamation-triangle"></i>Amenințări</h3>
+                <ul>
+                    <li>Competitori mari (Uber, Bolt) care pot dezvolta soluții similare</li>
+                    <li>Reglementări schimbătoare în industria de transport</li>
+                    <li>Rezistența companiilor tradiționale la adoptarea tehnologiei</li>
+                    <li>Potențiale probleme de securitate în sistemele distribuite</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section cta">
+        <h2>Transformă-ți Afacerea cu RideBest</h2>
+        <p>Solicită o demonstrație gratuită și descoperă cum RideBest poate revoluționa modul în care îți gestionezi operațiunile de taxi sau ride-sharing.</p>
+        <a href="#" class="btn">Programează o Demonstrație</a>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>RideBest</h3>
+                <p>Transformăm modul în care companiile de taxi și ride-sharing își gestionează operațiunile, oferind o soluție modernă, scalabilă și personalizabilă.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Link-uri Rapide</h3>
+                <ul class="footer-links">
+                    <li><a href="#motivatie">Motivație</a></li>
+                    <li><a href="#caracteristici">Caracteristici</a></li>
+                    <li><a href="#user-stories">User Stories</a></li>
+                    <li><a href="#analiza">Analiză SWOT</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><i class="fas fa-map-marker-alt"></i> Strada Dias 123, București</li>
+                    <li><i class="fas fa-phone"></i> +40 711 111 111</li>
+                    <li><i class="fas fa-envelope"></i> contact@ridebest.ro</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 RideBest Management System. Toate drepturile rezervate echipei DIAS.</p>
+        </div>
+    </footer>
+</body>
+</html>
