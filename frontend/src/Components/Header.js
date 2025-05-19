@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 const Header = () => {
   const tables = [
+    { name: "Landing Page", path: "/landingPage" },
     {
       name: "Nord",
       dropdown: [

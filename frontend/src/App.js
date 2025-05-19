@@ -80,6 +80,7 @@ function App() {
         <Route path="/angajatHR" element={<AngajatHRManagement />} />
         <Route path="/clientProfil" element={<ClientProfilManagement />} />
 
+        <Route path="/landingPage" element={<iframe title="Landing Page" src="/landingPage.html" style={{ width: "100%", height: "99.6vh", border: "none" }} />} />
       </Routes>
     </Router>
   );
